@@ -1,0 +1,12 @@
+Starting audit...
+[ERROR] D:\College\an2\POO\tema3\.\src\application\commands\users\artists\AddEvent.java:56:64: '5' is a magic number. [MagicNumber]
+[ERROR] D:\College\an2\POO\tema3\.\src\application\commands\users\artists\AddEvent.java:57:56: '6' is a magic number. [MagicNumber]
+[ERROR] D:\College\an2\POO\tema3\.\src\application\commands\users\artists\AddEvent.java:57:59: '10' is a magic number. [MagicNumber]
+[ERROR] D:\College\an2\POO\tema3\.\src\application\commands\users\artists\AddEvent.java:59:30: '12' is a magic number. [MagicNumber]
+[ERROR] D:\College\an2\POO\tema3\.\src\application\commands\users\artists\AddEvent.java:59:43: '31' is a magic number. [MagicNumber]
+[ERROR] D:\College\an2\POO\tema3\.\src\application\commands\users\artists\AddEvent.java:60:46: '28' is a magic number. [MagicNumber]
+[ERROR] D:\College\an2\POO\tema3\.\src\application\commands\users\artists\AddEvent.java:61:32: '1900' is a magic number. [MagicNumber]
+[ERROR] D:\College\an2\POO\tema3\.\src\application\commands\users\artists\AddEvent.java:61:48: '2023' is a magic number. [MagicNumber]
+[ERROR] D:\College\an2\POO\tema3\.\src\application\Run.java:147:5: Method length is 246 lines (max allowed is 150). [MethodLength]
+Audit done.
+Checkstyle ends with 9 errors.
