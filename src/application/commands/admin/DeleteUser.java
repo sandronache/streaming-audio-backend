@@ -54,6 +54,10 @@ public final class DeleteUser extends PlayerRelatedCommands {
      */
     private boolean deleteForNormalUser() {
         User user = library.getUser(username);
+        // if the user is a premium user we can't remove it
+        if (user.isPremium()) {
+            return false;
+        }
         // we check if any playlist plays any of this users playlist
         for (Player player: players) {
             if (!player.getUsername().equals(username)) {

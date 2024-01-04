@@ -4,6 +4,8 @@ import application.entities.library.Library;
 import application.entities.library.Playlist;
 import application.entities.library.Song;
 import application.entities.library.users.UserDatabase;
+import application.entities.library.users.artist.Artist;
+import application.entities.library.users.normal.premium.PremiumStatus;
 import application.entities.pages.HomePage;
 import application.entities.pages.Page;
 import application.entities.pages.visitor.PageVisitor;
@@ -32,6 +34,8 @@ public final class User implements UserDatabase {
     private Song songLastSelected;
     private boolean searched;
     private WrappedUser wrapped;
+    private boolean premium;
+    private PremiumStatus premiumStatus;
 
     /**
      * Default constructor
@@ -63,6 +67,8 @@ public final class User implements UserDatabase {
         this.followedPlaylists = new ArrayList<>();
         this.searched = false;
         this.wrapped = new WrappedUser();
+        this.premium = false;
+        this.premiumStatus =  new PremiumStatus();
     }
 
     /**
@@ -99,6 +105,8 @@ public final class User implements UserDatabase {
         this.typeLastSearch = null;
         this.searched = false;
         this.wrapped = new WrappedUser();
+        this.premium = false;
+        this.premiumStatus =  new PremiumStatus();
         libraryParam.getUsers().add(this);
     }
 
@@ -139,6 +147,37 @@ public final class User implements UserDatabase {
      */
     public void removeLikedPlaylist(final Playlist playlist) {
         this.followedPlaylists.remove(playlist);
+    }
+
+    /**
+     * Takes care of managing money after cancelling a subscription
+     */
+    public void cancelPremiumManagement(final Library library) {
+        // we check if the operation is posible
+        if (!premium) {
+            return;
+        }
+        // get the total number of songs
+        int totalSongs = premiumStatus.totalNrOfSongs();
+        // now we need to calculate for each artist
+        for (int i = 0; i < premiumStatus.getArtists().size(); i++) {
+            // we get the artist
+            Artist currentArtist = premiumStatus.getArtists().get(i);
+            // we calculate the songs played by this user that belongs
+            // to this artist
+            int totalSongsPerArtist = premiumStatus.getStates().get(i).totalNrOfSongsPerArtist();
+            // we calculate the revenue
+            double calculatedRevenue = (double) (1000000 * totalSongsPerArtist) / totalSongs;
+            // we add the revenue
+            library.addRevenue(calculatedRevenue, currentArtist.getUsername());
+            // we add the revenue for each song
+            premiumStatus.getStates().get(i).addRevenueToEachSong(calculatedRevenue);
+        }
+        // clear the premium status
+        this.premiumStatus.getArtists().clear();
+        this.premiumStatus.getStates().clear();
+        // cancel the premium
+        this.setPremium(false);
     }
 
     public void setUsername(final String username) {
@@ -211,5 +250,13 @@ public final class User implements UserDatabase {
 
     public void setWrapped(final WrappedUser wrapped) {
         this.wrapped = wrapped;
+    }
+
+    public void setPremium(final boolean premium) {
+        this.premium = premium;
+    }
+
+    public void setPremiumStatus(final PremiumStatus premiumStatus) {
+        this.premiumStatus = premiumStatus;
     }
 }

@@ -5,6 +5,8 @@ import application.entities.library.users.normal.User;
 import application.entities.library.users.artist.Album;
 import application.entities.library.users.artist.Artist;
 import application.entities.library.users.host.Host;
+import application.entities.library.users.normal.premium.ArtistPremiumStatus;
+import application.entities.library.users.normal.premium.PremiumStatus;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -173,6 +175,33 @@ public final class Library {
         songParam.addListen();
         // we also change the status of this artist as "played"
         this.artistGotPlayed(songParam.getArtist());
+        // if the user is a premium subscriber we need to track his activity
+        if (currentUser.isPremium()) {
+            PremiumStatus tempStatus = currentUser.getPremiumStatus();
+            // we try to see if we already have the artist
+            for (int i = 0; i < tempStatus.getArtists().size(); i++) {
+                Artist userArtist = tempStatus.getArtists().get(i);
+                // if we do we try to see if we already have his song
+                if (userArtist.getUsername().equals(songParam.getArtist())) {
+                    // if we do we try to see if we already have the song
+                    for (int j = 0; j < tempStatus.getStates().get(i).getSongs().size(); j++) {
+                        Song songArtist = tempStatus.getStates().get(i).getSongs().get(j);
+                        // if we do we add 1
+                        if (songArtist.getName().equals(songParam.getName())) {
+                            Integer value = tempStatus.getStates().get(i).getTimes().get(j);
+                            tempStatus.getStates().get(i).getTimes().set(j, value + 1);
+                            return;
+                        }
+                    }
+                    // if the song doesn't exist we add the song
+                    tempStatus.getStates().get(i).addNewPair(songParam);
+                    return;
+                }
+            }
+            // if not we need to add the artist and the song
+            tempStatus.getArtists().add(currentArtist);
+            tempStatus.getStates().add(new ArtistPremiumStatus(songParam));
+        }
     }
 
     /**
@@ -239,6 +268,19 @@ public final class Library {
                 Comparator.comparing(AccountArtist::getTotalRevenue).reversed()
                         .thenComparing(AccountArtist::getUsername)
         );
+    }
+
+    /**
+     * Method that adds revenue corresponding to the artist given as parameter
+     * @param revenue
+     * @param usernameParam
+     */
+    public void addRevenue(final Double revenue, final String usernameParam) {
+        for (AccountArtist accountsAllArtist : accountsAllArtists) {
+            if (accountsAllArtist.getUsername().equals(usernameParam)) {
+                accountsAllArtist.addRevenueSong(revenue);
+            }
+        }
     }
 
     public void setSongs(final ArrayList<Song> songs) {

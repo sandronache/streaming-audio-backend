@@ -174,6 +174,24 @@ public final class Artist implements UserDatabase, Page {
                 && Objects.equals(merchandise, artist.merchandise);
     }
 
+    /**
+     * This method finds the most profitable song for an artist
+     * @return
+     */
+    public Song findMostProfitableSong() {
+        Song result = null;
+        double maximum = 0;
+        for (Album album: albums) {
+            for (Song song: album.getSongs()) {
+                if (song.getRevenue() > maximum) {
+                    maximum = song.getRevenue();
+                    result = song;
+                }
+            }
+        }
+        return result;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(username, age, city, albums, events, merchandise);

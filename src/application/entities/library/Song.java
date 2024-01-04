@@ -110,6 +110,14 @@ public final class Song {
         listens++;
     }
 
+    /**
+     * Adds a certain revenue
+     * @param revenueParam
+     */
+    public void addRevenue(final Double revenueParam) {
+        revenue += revenueParam;
+    }
+
     public void setName(final String name) {
         this.name = name;
     }

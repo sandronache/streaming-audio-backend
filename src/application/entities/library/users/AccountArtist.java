@@ -40,6 +40,15 @@ public final class AccountArtist {
         playedOrNot = true;
     }
 
+    /**
+     * Method that adds revenue for a song
+     * @param revenueParam
+     */
+    public void addRevenueSong(final Double revenueParam) {
+        totalRevenue += revenueParam;
+        songRevenue += revenueParam;
+    }
+
     public void setUsername(final String username) {
         this.username = username;
     }

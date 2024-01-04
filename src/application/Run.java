@@ -5,6 +5,8 @@ import application.commands.admin.DeleteUser;
 import application.commands.admin.ShowAlbums;
 import application.commands.admin.ShowPodcasts;
 import application.commands.admin.Wrapped;
+import application.commands.admin.premium.BuyPremium;
+import application.commands.admin.premium.CancelPremium;
 import application.commands.player.AddRemoveInPlaylist;
 import application.commands.player.Backward;
 import application.commands.player.Forward;
@@ -77,6 +79,7 @@ public final class Run {
     private ObjectMapper objectMapper;
     private Integer globalPlaylistId;
     private ArrayList<Player> players;
+    private Integer lastTimestamp;
 
     // Singleton
     @Getter
@@ -154,6 +157,36 @@ public final class Run {
     }
 
     /**
+     * Updates the player
+     * @param currentPlayer
+     * @param timestamp
+     */
+    public void updatePlayer(final Player currentPlayer,
+                             final Integer timestamp) {
+        switch (currentPlayer.getType()) {
+            case "song" -> currentPlayer.checkIfEndedSong(timestamp);
+            case "podcast" -> currentPlayer.checkIfEndedPodcast(timestamp);
+            case "album" -> currentPlayer.checkIfEndedAlbum(timestamp);
+            case "playlist" -> currentPlayer.checkIfEndedPlaylist(timestamp);
+            default -> { }
+        }
+    }
+
+    /**
+     * Updates all players to this last timestamp
+     */
+    private void updateAllPlayers() {
+        for (Player player: players) {
+            User user = library.getUser(player.getUsername());
+            if (!player.getName().isEmpty() && !player.isPaused()
+                    && user.isStatus()) {
+                this.updatePlayer(player, lastTimestamp);
+            }
+            user.cancelPremiumManagement(library);
+        }
+    }
+
+    /**
      * This method prints the status of all artists accounts
      */
     public void endProgram() {
@@ -178,7 +211,14 @@ public final class Run {
             iterNode.put("songRevenue", tempAccount.getSongRevenue());
             iterNode.put("merchRevenue", tempAccount.getMerchRevenue());
             iterNode.put("ranking", i + 1);
-            iterNode.put("mostProfitableSong", "N/A");
+            // find the most profitable song
+            Song mostProfSong = library.getArtist(tempAccount.getUsername())
+                    .findMostProfitableSong();
+            if (mostProfSong == null) {
+                iterNode.put("mostProfitableSong", "N/A");
+            } else {
+                iterNode.put("mostProfitableSong", mostProfSong.getName());
+            }
             // set the artist
             node1.set(tempAccount.getUsername(), iterNode);
         }
@@ -441,9 +481,24 @@ public final class Run {
                             command.getTimestamp(), library, players);
                     wrapped.startCommand(objectMapper, outputs);
                 }
+                case "buyPremium" -> {
+                    BuyPremium buyPremium = new BuyPremium(command.getCommand(),
+                            command.getUsername(), command.getTimestamp(),
+                            library, players);
+                    buyPremium.startCommand(objectMapper, outputs);
+                }
+                case "cancelPremium" -> {
+                    CancelPremium cancelPremium = new CancelPremium(command.getCommand(),
+                            command.getUsername(), command.getTimestamp(),
+                            library, players);
+                    cancelPremium.startCommand(objectMapper, outputs);
+                }
                 default -> { }
             }
+            // we get the last typestamp
+            this.lastTimestamp = command.getTimestamp();
         }
+        this.updateAllPlayers();
         this.endProgram();
     }
 
@@ -462,6 +517,15 @@ public final class Run {
     public void setCommands(final List<Command> commands) {
         this.commands = commands;
     }
+
+    public void setPlayers(final ArrayList<Player> players) {
+        this.players = players;
+    }
+
+    public void setTimestamp(final Integer timestamp) {
+        this.lastTimestamp = timestamp;
+    }
+
     public void setGlobalPlaylistId(final Integer globalPlaylistId) {
         this.globalPlaylistId = globalPlaylistId;
     }

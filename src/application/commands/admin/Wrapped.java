@@ -123,7 +123,7 @@ public final class Wrapped extends PlayerRelatedCommands {
         }
         // we check if we have what to show
         if (usersLToCurrentArtist.isEmpty()) {
-            node.put("message", "No data to show for user " + this.username + ".");
+            node.put("message", "No data to show for artist " + this.username + ".");
             return;
         }
         // sort the users
@@ -185,15 +185,17 @@ public final class Wrapped extends PlayerRelatedCommands {
         Host currentHost = library.getHost(this.username);
         // we check if we have what to show
         if (currentHost.getListeners().isEmpty()) {
-            node.put("message", "No data to show for user " + this.username + ".");
+            node.put("message", "No data to show for host " + this.username + ".");
             return;
         }
         // new node
         ObjectNode node1 = objectMapper.createObjectNode();
         // we build the array with all episodes
         ArrayList<Episode> episodesPerHost = new ArrayList<>();
-        for (Podcast podcastHost: currentHost.getPodcasts()) {
-            episodesPerHost.addAll(podcastHost.getEpisodes());
+        for (Podcast podcast: library.getPodcasts()) {
+            if (podcast.getOwner().equals(currentHost.getUsername())) {
+                episodesPerHost.addAll(podcast.getEpisodes());
+            }
         }
         // we sort the episodes
         Collections.sort(episodesPerHost, Comparator
@@ -201,7 +203,8 @@ public final class Wrapped extends PlayerRelatedCommands {
                 .thenComparing(Episode::getName));
         // top episodes:
         ObjectNode node2 = objectMapper.createObjectNode();
-        for (int i = 0; i < episodesPerHost.size() && i < FIVE; i++) {
+        for (int i = 0; i < episodesPerHost.size() && i < FIVE
+                && episodesPerHost.get(i).getListens() > 0; i++) {
             node2.put(episodesPerHost.get(i).getName(),
                     episodesPerHost.get(i).getListens());
         }
