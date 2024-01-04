@@ -3,7 +3,7 @@ package application.commands.users.hosts;
 import application.commands.root.PlayerRelatedCommands;
 import application.entities.library.Library;
 import application.entities.library.Podcast;
-import application.entities.library.users.User;
+import application.entities.library.users.normal.User;
 import application.entities.library.users.host.Host;
 import application.entities.player.Player;
 import com.fasterxml.jackson.databind.ObjectMapper;

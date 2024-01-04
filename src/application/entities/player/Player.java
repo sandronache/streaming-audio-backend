@@ -262,12 +262,16 @@ public final class Player {
                         index = 0;
                         this.song = album.getSongs().get(index);
                         this.remainedTime = song.getDuration();
+                        // add to the wrapped
+                        library.addSongForUser(this.username, this.song);
                         continue;
                     }
                 }
                 index = index + 1;
                 this.song = album.getSongs().get(index);
                 this.remainedTime = song.getDuration();
+                // add to the wrapped
+                library.addSongForUser(this.username, this.song);
             }
             remainedTime -= temporary;
         }
@@ -300,6 +304,8 @@ public final class Player {
                         index = indicesShuffle.get(songIndexShuffle);
                         this.song = album.getSongs().get(index);
                         this.remainedTime = song.getDuration();
+                        // add to the wrapped
+                        library.addSongForUser(this.username, this.song);
                         continue;
                     }
                 }
@@ -307,6 +313,8 @@ public final class Player {
                 index = indicesShuffle.get(songIndexShuffle);
                 this.song = album.getSongs().get(index);
                 this.remainedTime = song.getDuration();
+                // add to the wrapped
+                library.addSongForUser(this.username, this.song);
             }
             remainedTime -= temporary;
         }
@@ -332,6 +340,10 @@ public final class Player {
         } else {
             if (repeat == 2) {
                 temp -= remainedTime;
+                // add to the wrapped
+                for (int i = 0; i < ((temp / this.song.getDuration()) + 1); i++) {
+                    library.addSongForUser(this.username, this.song);
+                }
                 this.remainedTime = this.song.getDuration()
                         - (temp % this.song.getDuration());
             } else {
@@ -371,12 +383,16 @@ public final class Player {
                         index = 0;
                         this.song = playlist.getSongs().get(index);
                         this.remainedTime = song.getDuration();
+                        // add to the wrapped
+                        library.addSongForUser(this.username, this.song);
                         continue;
                     }
                 }
                 index = index + 1;
                 this.song = playlist.getSongs().get(index);
                 this.remainedTime = song.getDuration();
+                // add to the wrapped
+                library.addSongForUser(this.username, this.song);
             }
             remainedTime -= temporary;
         }
@@ -409,6 +425,8 @@ public final class Player {
                         index = indicesShuffle.get(songIndexShuffle);
                         this.song = playlist.getSongs().get(index);
                         this.remainedTime = song.getDuration();
+                        // add to the wrapped
+                        library.addSongForUser(this.username, this.song);
                         continue;
                     }
                 }
@@ -416,6 +434,8 @@ public final class Player {
                 index = indicesShuffle.get(songIndexShuffle);
                 this.song = playlist.getSongs().get(index);
                 this.remainedTime = song.getDuration();
+                // add to the wrapped
+                library.addSongForUser(this.username, this.song);
             }
             remainedTime -= temporary;
         }
@@ -441,6 +461,10 @@ public final class Player {
         } else {
              if (repeat == 2) {
                 temp -= remainedTime;
+                 // add to the wrapped
+                 for (int i = 0; i < ((temp / this.song.getDuration()) + 1); i++) {
+                     library.addSongForUser(this.username, this.song);
+                 }
                 this.remainedTime = this.song.getDuration()
                         - (temp % this.song.getDuration());
             } else {
@@ -531,6 +555,9 @@ public final class Player {
                 episodeInput = podcast.getEpisodes().get(j);
                 situationPodcasts.get(i).setMinute(0);
                 situationPodcasts.get(i).setNameEpisode(episodeInput.getName());
+                // add to the wrapped
+                library.addEpisodeForUserAndHost(this.username,
+                        episodeInput, podcast.getOwner());
             }
             situationPodcasts.get(i).setMinute(temporary);
         }
@@ -560,6 +587,9 @@ public final class Player {
                 situationPodcasts.get(i).setMinute(0);
                 situationPodcasts.get(i).setNameEpisode(
                         podcast.getEpisodes().get(j + 1).getName());
+                // add to the wrapped
+                library.addEpisodeForUserAndHost(this.username,
+                        podcast.getEpisodes().get(j + 1), podcast.getOwner());
                 this.repeat = 0;
                 this.podcastNoRepeat(newTemp);
             }
@@ -594,6 +624,11 @@ public final class Player {
             } else {
                 int newTemp = situationPodcasts.get(i).getMinute()
                         + temp - episodeInput.getDuration();
+                // add to the wrapped
+                for (int k = 0; k < ((newTemp / episodeInput.getDuration()) + 1); k++) {
+                    library.addEpisodeForUserAndHost(this.username,
+                            episodeInput, podcast.getOwner());
+                }
                 situationPodcasts.get(i).setMinute(
                         newTemp % episodeInput.getDuration());
             }
@@ -622,7 +657,13 @@ public final class Player {
                 this.remainedTime = this.song.getDuration()
                         + temp;
                 this.repeat = 0;
+                // add to the wrapped
+                library.addSongForUser(this.username, this.song);
             } else {
+                // add to the wrapped
+                for (int i = 0; i < (((-temp) / this.song.getDuration()) + 1); i++) {
+                    library.addSongForUser(this.username, this.song);
+                }
                 this.remainedTime = this.song.getDuration()
                         - ((-temp) % this.song.getDuration());
             }

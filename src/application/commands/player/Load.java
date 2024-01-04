@@ -5,7 +5,7 @@ import application.entities.library.Library;
 import application.entities.library.Playlist;
 import application.entities.library.Podcast;
 import application.entities.library.Song;
-import application.entities.library.users.User;
+import application.entities.library.users.normal.User;
 import application.entities.library.users.artist.Album;
 import application.entities.library.users.artist.Artist;
 import application.entities.player.Player;
@@ -80,6 +80,8 @@ public final class Load extends PlayerRelatedCommands {
         if (currentPlayer == null) {
             currentPlayer = new Player(this.getUsername(), library);
             players.add(currentPlayer);
+        } else if (!currentPlayer.isPaused() && !currentPlayer.getName().isEmpty()) {
+            this.updatePlayer(currentPlayer, this.timestamp);
         }
 
         switch (user.getTypeLastSearch()) {
@@ -90,6 +92,8 @@ public final class Load extends PlayerRelatedCommands {
                                 user.getSongLastSelected().getName(), "song",
                                 user.getSongLastSelected().getDuration(), this.timestamp,
                                 0, false, false);
+                        // we add the new data for the song in the wrapped
+                        library.addSongForUser(this.username, user.getSongLastSelected());
                     }
                 }
             }
@@ -100,6 +104,9 @@ public final class Load extends PlayerRelatedCommands {
                         currentPlayer.setNewStatusPodcast(user.getLastSelected(),
                                 user.getArtistLastSelected(), "podcast", this.timestamp,
                                 0, false, false);
+                        // we add all the details necessary for playing this podcast to the wrapped
+                        library.addEpisodeForUserAndHost(this.username,
+                                podcast.getEpisodes().get(0), podcast.getOwner());
                     }
                 }
             }
@@ -117,6 +124,8 @@ public final class Load extends PlayerRelatedCommands {
                                     user.getLastSelected(), "playlist", playlist,
                                     playlist.getSongs().get(0).getDuration(),
                                     this.timestamp, 0, false, false);
+                            // we add the new data for the song in the wrapped
+                            library.addSongForUser(this.username, playlist.getSongs().get(0));
                         }
                     }
                 }
@@ -136,6 +145,8 @@ public final class Load extends PlayerRelatedCommands {
                                     user.getLastSelected(), "album", album,
                                     album.getSongs().get(0).getDuration(),
                                     this.timestamp, 0, false, false);
+                            // we add the new data for the song in the wrapped
+                            library.addSongForUser(this.username, album.getSongs().get(0));
                         }
                     }
                 }

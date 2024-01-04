@@ -53,8 +53,8 @@ public final class AddUser implements Commands {
     public void startCommand(final ObjectMapper objectMapper, final ArrayNode outputs) {
         ObjectNode node = objectMapper.createObjectNode();
         node.put("command", this.getCommand());
-        node.put("timestamp", this.getTimestamp());
         node.put("user", this.getUsername());
+        node.put("timestamp", this.getTimestamp());
 
         if (library.typeOfUser(username) != 0) {
             node.put("message", "The username " + username + " is already taken.");
@@ -65,6 +65,10 @@ public final class AddUser implements Commands {
         UserFactory factory = new UserFactory();
         // create the user depending on type
         UserDatabase newUser = factory.createUser(type);
+        // if the artist is new we create an account for him
+        if (this.type.equals("artist")) {
+            library.checkIfExistsAccount(this.username);
+        }
         // put fields and add to the library
         newUser.build(username, age, city, library);
 

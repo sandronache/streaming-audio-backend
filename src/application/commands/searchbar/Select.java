@@ -2,7 +2,7 @@ package application.commands.searchbar;
 
 import application.commands.root.Commands;
 import application.entities.library.Library;
-import application.entities.library.users.User;
+import application.entities.library.users.normal.User;
 import application.entities.library.users.artist.Artist;
 import application.entities.library.users.host.Host;
 import com.fasterxml.jackson.databind.ObjectMapper;

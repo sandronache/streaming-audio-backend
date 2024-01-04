@@ -3,7 +3,7 @@ package application.commands.playlists;
 import application.commands.root.Commands;
 import application.entities.library.Library;
 import application.entities.library.Playlist;
-import application.entities.library.users.User;
+import application.entities.library.users.normal.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;

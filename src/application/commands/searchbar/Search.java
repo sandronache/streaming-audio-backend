@@ -6,7 +6,7 @@ import application.entities.library.Library;
 import application.entities.library.Playlist;
 import application.entities.library.Podcast;
 import application.entities.library.Song;
-import application.entities.library.users.User;
+import application.entities.library.users.normal.User;
 import application.entities.library.users.artist.Album;
 import application.entities.library.users.artist.Artist;
 import application.entities.library.users.host.Host;
@@ -64,6 +64,10 @@ public final class Search extends PlayerRelatedCommands {
         if (currentPlayer == null || currentPlayer.getName().isEmpty()) {
             return;
         }
+        // we update the player first before ending it
+        if (!currentPlayer.isPaused()) {
+            this.updatePlayer(currentPlayer, this.timestamp);
+        }
         switch (currentPlayer.getType()) {
             case "song" -> currentPlayer.setNewStatusSong(currentPlayer.getSong(),
                     "", "song",
@@ -111,12 +115,13 @@ public final class Search extends PlayerRelatedCommands {
                            final ArrayList<Song> songsLastSearched) {
         for (Song song : library.getSongs()) {
             if (this.filters.getName() != null) {
-                if (!song.getName().startsWith(this.filters.getName())) {
+                if (!song.getName().toLowerCase()
+                        .startsWith(this.filters.getName().toLowerCase())) {
                     continue;
                 }
             }
             if (this.filters.getAlbum() != null) {
-                if (!song.getAlbum().equals(this.filters.getAlbum())) {
+                if (!song.getAlbum().equalsIgnoreCase(this.filters.getAlbum())) {
                     continue;
                 }
             }
@@ -133,7 +138,7 @@ public final class Search extends PlayerRelatedCommands {
                 }
             }
             if (this.filters.getArtist() != null) {
-                if (!song.getArtist().equals(this.filters.getArtist())) {
+                if (!song.getArtist().equalsIgnoreCase(this.filters.getArtist())) {
                     continue;
                 }
             }
@@ -158,7 +163,7 @@ public final class Search extends PlayerRelatedCommands {
                 for (String ourTag : this.filters.getTags()) {
                     result1 = 0;
                     for (String tag : song.getTags()) {
-                        if (ourTag.equals(tag)) {
+                        if (ourTag.equalsIgnoreCase(tag)) {
                             result1 = 1;
                             break;
                         }
@@ -187,12 +192,13 @@ public final class Search extends PlayerRelatedCommands {
                               final ArrayList<String> artistLastSearch) {
         for (Podcast podcast : library.getPodcasts()) {
             if (this.filters.getName() != null) {
-                if (!podcast.getName().startsWith(this.filters.getName())) {
+                if (!podcast.getName().toLowerCase().
+                        startsWith(this.filters.getName().toLowerCase())) {
                     continue;
                 }
             }
             if (this.filters.getOwner() != null) {
-                if (!podcast.getOwner().equals(this.filters.getOwner())) {
+                if (!podcast.getOwner().equalsIgnoreCase(this.filters.getOwner())) {
                     continue;
                 }
             }
@@ -215,7 +221,7 @@ public final class Search extends PlayerRelatedCommands {
                 int result = 0;
                 if (this.filters.getOwner() != null && (playlist.isVisibility()
                         || user.getUsername().equals(this.getUsername()))) {
-                    if (user.getUsername().equals(this.filters.getOwner())) {
+                    if (user.getUsername().equalsIgnoreCase(this.filters.getOwner())) {
                         result = 1;
                     } else {
                         continue;
@@ -224,7 +230,7 @@ public final class Search extends PlayerRelatedCommands {
                 if (this.filters.getName() != null) {
                     if (playlist.getName().startsWith(this.filters.getName())
                             && (playlist.isVisibility()
-                            || user.getUsername().equals(this.getUsername()))) {
+                            || user.getUsername().equalsIgnoreCase(this.getUsername()))) {
                         result = 1;
                     } else {
                         continue;
@@ -254,22 +260,24 @@ public final class Search extends PlayerRelatedCommands {
             for (Album album : artist.getAlbums()) {
                 int result = 0;
                 if (this.filters.getOwner() != null) {
-                    if (artist.getUsername().startsWith(this.filters.getOwner())) {
+                    if (artist.getUsername().toLowerCase().
+                            startsWith(this.filters.getOwner().toLowerCase())) {
                         result = 1;
                     } else {
                         continue;
                     }
                 }
                 if (this.filters.getName() != null) {
-                    if (album.getName().startsWith(this.filters.getName())) {
+                    if (album.getName().toLowerCase().
+                            startsWith(this.filters.getName().toLowerCase())) {
                         result = 1;
                     } else {
                         continue;
                     }
                 }
                 if (this.filters.getDescription() != null) {
-                    if (album.getDescription().startsWith(
-                            this.filters.getDescription())) {
+                    if (album.getDescription().toLowerCase().startsWith(
+                            this.filters.getDescription().toLowerCase())) {
                         result = 1;
                     } else {
                         continue;
@@ -295,7 +303,8 @@ public final class Search extends PlayerRelatedCommands {
     public void searchArtist(final ArrayList<String> lastSearch) {
         for (Artist artist: library.getArtists()) {
             if (this.filters.getName() != null) {
-                if (artist.getUsername().startsWith(this.filters.getName())) {
+                if (artist.getUsername().toLowerCase().
+                        startsWith(this.filters.getName().toLowerCase())) {
                     lastSearch.add(artist.getUsername());
                     if (lastSearch.size() == FIVE) {
                         break;

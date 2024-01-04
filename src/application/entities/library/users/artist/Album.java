@@ -15,6 +15,7 @@ public final class Album {
     private Integer releaseYear;
     private String description;
     private ArrayList<Song> songs;
+    private Integer listens;
 
     /**
      * Constructor
@@ -29,6 +30,7 @@ public final class Album {
         this.releaseYear = releaseYear;
         this.description = description;
         this.songs = songs;
+        this.listens = 0;
     }
 
     /**
@@ -58,6 +60,13 @@ public final class Album {
                 && Objects.equals(songs, album.songs);
     }
 
+    /**
+     * Adds a new listening to the album
+     */
+    public void addListen() {
+        this.listens++;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(name, releaseYear, description, songs);
@@ -77,5 +86,9 @@ public final class Album {
 
     public void setSongs(final ArrayList<Song> songs) {
         this.songs = songs;
+    }
+
+    public void setListens(final Integer listens) {
+        this.listens = listens;
     }
 }

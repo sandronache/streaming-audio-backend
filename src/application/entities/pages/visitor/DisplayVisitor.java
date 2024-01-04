@@ -4,7 +4,7 @@ import application.entities.library.Episode;
 import application.entities.library.Library;
 import application.entities.library.Playlist;
 import application.entities.library.Podcast;
-import application.entities.library.users.User;
+import application.entities.library.users.normal.User;
 import application.entities.library.users.artist.Artist;
 import application.entities.library.users.artist.Event;
 import application.entities.library.users.artist.Merch;

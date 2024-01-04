@@ -2,6 +2,7 @@ package application.entities.library.users.host;
 
 import application.entities.library.Library;
 import application.entities.library.Podcast;
+import application.entities.library.users.normal.User;
 import application.entities.library.users.UserDatabase;
 import application.entities.pages.Page;
 import application.entities.pages.visitor.PageVisitor;
@@ -22,6 +23,7 @@ public final class Host implements UserDatabase, Page {
     private String city;
     private ArrayList<Podcast> podcasts;
     private ArrayList<Announcement> announcements;
+    private ArrayList<User> listeners;
 
     /**
      * Function that builds an object(Host)
@@ -37,6 +39,7 @@ public final class Host implements UserDatabase, Page {
         this.city = cityParam;
         this.podcasts = new ArrayList<>();
         this.announcements = new ArrayList<>();
+        this.listeners = new ArrayList<>();
         libraryParam.getHosts().add(this);
     }
 
@@ -133,6 +136,19 @@ public final class Host implements UserDatabase, Page {
         }
     }
 
+    /**
+     * Adds a new listener
+     * @param userParam
+     */
+    public void addListener(final User userParam) {
+        for (User listener: listeners) {
+            if (listener.getUsername().equals(userParam.getUsername())) {
+                return;
+            }
+        }
+        listeners.add(userParam);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -168,5 +184,13 @@ public final class Host implements UserDatabase, Page {
 
     public void setPodcasts(final ArrayList<Podcast> podcasts) {
         this.podcasts = podcasts;
+    }
+
+    public void setAnnouncements(final ArrayList<Announcement> announcements) {
+        this.announcements = announcements;
+    }
+
+    public void setListeners(final ArrayList<User> listeners) {
+        this.listeners = listeners;
     }
 }

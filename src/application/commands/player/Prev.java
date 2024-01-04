@@ -48,6 +48,8 @@ public final class Prev extends PlayerRelatedCommands {
             currentPlayer.setRepeat(0);
         }
         currentPlayer.setRemainedTime(currentPlayer.getSong().getDuration());
+        // add to the wrapped
+        library.addSongForUser(this.username, currentPlayer.getSong());
     }
 
     /**
@@ -61,6 +63,13 @@ public final class Prev extends PlayerRelatedCommands {
                 && j > 0 && currentPlayer.getRepeat() == 0) {
             currentPlayer.getSituationPodcasts().get(i).setNameEpisode(
                     podcast.getEpisodes().get(j - 1).getName());
+            // add to the wrapped
+            library.addEpisodeForUserAndHost(this.username,
+                    podcast.getEpisodes().get(j - 1), podcast.getOwner());
+        } else {
+            // add to the wrapped
+            library.addEpisodeForUserAndHost(this.username,
+                    podcast.getEpisodes().get(j), podcast.getOwner());
         }
         if (currentPlayer.getRepeat() == 1) {
             currentPlayer.setRepeat(0);
@@ -81,6 +90,8 @@ public final class Prev extends PlayerRelatedCommands {
                     currentPlayer.getIndicesShuffle().get(songIndexShuffle - 1)));
         }
         currentPlayer.setRemainedTime(currentPlayer.getSong().getDuration());
+        // add to the wrapped
+        library.addSongForUser(this.username, currentPlayer.getSong());
     }
 
     /**
@@ -93,6 +104,8 @@ public final class Prev extends PlayerRelatedCommands {
             currentPlayer.setSong(currentPlayer.getAlbum().getSongs().get(songIndex - 1));
         }
         currentPlayer.setRemainedTime(currentPlayer.getSong().getDuration());
+        // add to the wrapped
+        library.addSongForUser(this.username, currentPlayer.getSong());
     }
 
     /**
@@ -108,6 +121,8 @@ public final class Prev extends PlayerRelatedCommands {
                     currentPlayer.getIndicesShuffle().get(songIndexShuffle - 1)));
         }
         currentPlayer.setRemainedTime(currentPlayer.getSong().getDuration());
+        // add to the wrapped
+        library.addSongForUser(this.username, currentPlayer.getSong());
     }
 
     /**
@@ -120,6 +135,8 @@ public final class Prev extends PlayerRelatedCommands {
             currentPlayer.setSong(currentPlayer.getPlaylist().getSongs().get(songIndex - 1));
         }
         currentPlayer.setRemainedTime(currentPlayer.getSong().getDuration());
+        // add to the wrapped
+        library.addSongForUser(this.username, currentPlayer.getSong());
     }
 
     /**

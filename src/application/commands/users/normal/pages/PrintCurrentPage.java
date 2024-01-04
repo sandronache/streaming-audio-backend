@@ -2,7 +2,7 @@ package application.commands.users.normal.pages;
 
 import application.commands.root.Commands;
 import application.entities.library.Library;
-import application.entities.library.users.User;
+import application.entities.library.users.normal.User;
 import application.entities.pages.visitor.DisplayVisitor;
 import application.entities.pages.visitor.UpdateVisitor;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,8 +1,9 @@
-package application.entities.library.users;
+package application.entities.library.users.normal;
 
 import application.entities.library.Library;
 import application.entities.library.Playlist;
 import application.entities.library.Song;
+import application.entities.library.users.UserDatabase;
 import application.entities.pages.HomePage;
 import application.entities.pages.Page;
 import application.entities.pages.visitor.PageVisitor;
@@ -30,6 +31,7 @@ public final class User implements UserDatabase {
     private String artistLastSelected;
     private Song songLastSelected;
     private boolean searched;
+    private WrappedUser wrapped;
 
     /**
      * Default constructor
@@ -60,6 +62,7 @@ public final class User implements UserDatabase {
         this.typeLastSearch = null;
         this.followedPlaylists = new ArrayList<>();
         this.searched = false;
+        this.wrapped = new WrappedUser();
     }
 
     /**
@@ -95,6 +98,7 @@ public final class User implements UserDatabase {
         this.songLastSelected = null;
         this.typeLastSearch = null;
         this.searched = false;
+        this.wrapped = new WrappedUser();
         libraryParam.getUsers().add(this);
     }
 
@@ -203,5 +207,9 @@ public final class User implements UserDatabase {
 
     public void setAsideLastSelected(final String asideLastSelected) {
         this.asideLastSelected = asideLastSelected;
+    }
+
+    public void setWrapped(final WrappedUser wrapped) {
+        this.wrapped = wrapped;
     }
 }

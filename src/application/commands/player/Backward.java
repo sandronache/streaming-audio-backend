@@ -61,6 +61,13 @@ public final class Backward extends PlayerRelatedCommands {
                 if (j != 0) {
                     currentPlayer.getSituationPodcasts().get(i).setNameEpisode(
                             podcast.getEpisodes().get(j - 1).getName());
+                    // add to the wrapped
+                    library.addEpisodeForUserAndHost(this.username,
+                            podcast.getEpisodes().get(j - 1), podcast.getOwner());
+                } else {
+                    // add to the wrapped
+                    library.addEpisodeForUserAndHost(this.username,
+                            podcast.getEpisodes().get(j), podcast.getOwner());
                 }
             }
         }

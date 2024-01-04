@@ -62,10 +62,16 @@ public final class Forward extends PlayerRelatedCommands {
                     currentPlayer.getSituationPodcasts().get(i).setMinute(0);
                     currentPlayer.getSituationPodcasts().get(i).setNameEpisode(
                             podcast.getEpisodes().get(0).getName());
+                    // add to the wrapped
+                    library.addEpisodeForUserAndHost(this.username,
+                            podcast.getEpisodes().get(0), podcast.getOwner());
                 } else {
                     currentPlayer.getSituationPodcasts().get(i).setMinute(0);
                     currentPlayer.getSituationPodcasts().get(i).setNameEpisode(
                             podcast.getEpisodes().get(j + 1).getName());
+                    // add to the wrapped
+                    library.addEpisodeForUserAndHost(this.username,
+                            podcast.getEpisodes().get(j + 1), podcast.getOwner());
                 }
             }
         }

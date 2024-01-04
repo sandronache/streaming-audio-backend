@@ -2,7 +2,7 @@ package application.entities.pages.visitor;
 
 import application.entities.library.Playlist;
 import application.entities.library.Song;
-import application.entities.library.users.User;
+import application.entities.library.users.normal.User;
 import application.entities.library.users.artist.Artist;
 import application.entities.library.users.host.Host;
 import application.entities.pages.HomePage;

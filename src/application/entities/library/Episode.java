@@ -12,11 +12,14 @@ public final class Episode {
     private String name;
     private Integer duration;
     private String description;
+    private Integer listens;
 
     /**
      * Default constructor
      */
-    public Episode() { }
+    public Episode() {
+        listens = 0;
+    }
 
     /**
      * Constructor
@@ -29,6 +32,14 @@ public final class Episode {
         this.name = name;
         this.duration = duration;
         this.description = description;
+        listens = 0;
+    }
+
+    /**
+     * Adds one listener
+     */
+    public void addListen() {
+        listens++;
     }
 
     @Override
@@ -60,5 +71,9 @@ public final class Episode {
 
     public void setDescription(final String description) {
         this.description = description;
+    }
+
+    public void setListens(final Integer listens) {
+        this.listens = listens;
     }
 }

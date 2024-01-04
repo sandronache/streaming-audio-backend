@@ -1,11 +1,14 @@
 package application.entities.library;
 
-import application.entities.library.users.User;
+import application.entities.library.users.AccountArtist;
+import application.entities.library.users.normal.User;
+import application.entities.library.users.artist.Album;
 import application.entities.library.users.artist.Artist;
 import application.entities.library.users.host.Host;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import static application.constants.Constants.THREE;
 
@@ -19,6 +22,7 @@ public final class Library {
     private ArrayList<User> users;
     private ArrayList<Host> hosts;
     private ArrayList<Artist> artists;
+    private ArrayList<AccountArtist> accountsAllArtists;
 
     /**
      * Constructor for the library
@@ -27,12 +31,13 @@ public final class Library {
      * @param users
      */
     public Library(final ArrayList<Song> songs, final ArrayList<Podcast> podcasts,
-                   final ArrayList<User> users) {
+                   final ArrayList<User> users, final ArrayList<AccountArtist> accounts) {
         this.songs = songs;
         this.podcasts = podcasts;
         this.users = users;
         this.hosts = new ArrayList<>();
         this.artists = new ArrayList<>();
+        this.accountsAllArtists = accounts;
     }
 
     /**
@@ -134,6 +139,108 @@ public final class Library {
         }
     }
 
+    /**
+     * This method does all the work of adding all details necessary after
+     * playling a song in a player
+     * @param usernameParam
+     * @param songParam
+     */
+    public void addSongForUser(final String usernameParam, final Song songParam) {
+        // we find the normal user if possible
+        User currentUser = this.getUser(usernameParam);
+        if (currentUser == null) {
+            return;
+        }
+        // we add the song and the genre
+        currentUser.getWrapped().addSong(songParam);
+        currentUser.getWrapped().addGenre(songParam.getGenre());
+        // we check if the artist has a page, so we can add him too
+        Artist currentArtist = this.getArtist(songParam.getArtist());
+        if (currentArtist == null) {
+            return;
+        }
+        // we add the artist
+        currentUser.getWrapped().addArtist(currentArtist);
+        // now we want to find the album where this song is:
+        for (Album currentArtistAlbum: currentArtist.getAlbums()) {
+            if (currentArtistAlbum.getName().equals(songParam.getAlbum())) {
+                currentUser.getWrapped().addAlbum(currentArtistAlbum);
+                currentArtistAlbum.addListen();
+                break;
+            }
+        }
+        // we add a new like to the song
+        songParam.addListen();
+        // we also change the status of this artist as "played"
+        this.artistGotPlayed(songParam.getArtist());
+    }
+
+    /**
+     * This method does all the work of adding all details necessary after
+     * playling an episode in a player
+     * @param usernameUser
+     * @param episodeParam
+     * @param usernameHost
+     */
+    public void addEpisodeForUserAndHost(final String usernameUser,
+                                         final Episode episodeParam,
+                                         final String usernameHost) {
+        // we find the normal user if possible
+        User currentUser = this.getUser(usernameUser);
+        if (currentUser == null) {
+            return;
+        }
+        // we add the episode
+        currentUser.getWrapped().addEpisode(episodeParam);
+        // we add a like to the episode
+        episodeParam.addListen();
+        // we find the host of the podcast if possible
+        Host currentHost = this.getHost(usernameHost);
+        if (currentHost == null) {
+            return;
+        }
+        // we add the new listener to the host
+        currentHost.addListener(currentUser);
+    }
+
+    /**
+     * This method creates a new account if necessary
+     * @param userArtist
+     */
+    public void checkIfExistsAccount(final String userArtist) {
+        for (AccountArtist iter: this.accountsAllArtists) {
+            if (userArtist.equals(iter.getUsername())) {
+                return;
+            }
+        }
+        this.accountsAllArtists.add(new AccountArtist(userArtist));
+    }
+
+    /**
+     * This method searhes a certain artist and changes the status of "played"
+     * @param userArtist
+     */
+    public void artistGotPlayed(final String userArtist) {
+        for (AccountArtist iter: this.accountsAllArtists) {
+            if (userArtist.equals(iter.getUsername())) {
+                iter.gotPlayed();
+            }
+        }
+    }
+
+    /**
+     * This method is for sorting the accounts
+     */
+    public void sortAccounts() {
+        // remove the account for artists which were not even played
+        accountsAllArtists.removeIf(account -> !account.isPlayedOrNot());
+        // sorting
+        accountsAllArtists.sort(
+                Comparator.comparing(AccountArtist::getTotalRevenue).reversed()
+                        .thenComparing(AccountArtist::getUsername)
+        );
+    }
+
     public void setSongs(final ArrayList<Song> songs) {
         this.songs = songs;
     }
@@ -152,5 +259,9 @@ public final class Library {
 
     public void setArtists(final ArrayList<Artist> artists) {
         this.artists = artists;
+    }
+
+    public void setAccountsAllArtists(final ArrayList<AccountArtist> accountsAllArtists) {
+        this.accountsAllArtists = accountsAllArtists;
     }
 }

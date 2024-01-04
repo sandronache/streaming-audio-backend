@@ -55,6 +55,8 @@ public final class Next extends PlayerRelatedCommands {
         }
         currentPlayer.setRemainedTime(currentPlayer.getSong().getDuration());
         currentPlayer.setPaused(false);
+        // add to the wrapped
+        library.addSongForUser(this.username, currentPlayer.getSong());
     }
 
     /**
@@ -75,12 +77,16 @@ public final class Next extends PlayerRelatedCommands {
                 currentPlayer.setRemainedTime(currentPlayer.getSong().getDuration());
             }
             currentPlayer.setPaused(false);
+            // add to the wrapped
+            library.addSongForUser(this.username, currentPlayer.getSong());
             return;
         }
         index = index + 1;
         currentPlayer.setSong(currentPlayer.getPlaylist().getSongs().get(index));
         currentPlayer.setRemainedTime(currentPlayer.getSong().getDuration());
         currentPlayer.setPaused(false);
+        // add to the wrapped
+        library.addSongForUser(this.username, currentPlayer.getSong());
     }
 
     /**
@@ -103,6 +109,8 @@ public final class Next extends PlayerRelatedCommands {
                 currentPlayer.setRemainedTime(currentPlayer.getSong().getDuration());
             }
             currentPlayer.setPaused(false);
+            // add to the wrapped
+            library.addSongForUser(this.username, currentPlayer.getSong());
             return;
         }
         songIndexShuffle = songIndexShuffle + 1;
@@ -110,6 +118,8 @@ public final class Next extends PlayerRelatedCommands {
         currentPlayer.setSong(currentPlayer.getPlaylist().getSongs().get(index));
         currentPlayer.setRemainedTime(currentPlayer.getSong().getDuration());
         currentPlayer.setPaused(false);
+        // add to the wrapped
+        library.addSongForUser(this.username, currentPlayer.getSong());
     }
 
     /**
@@ -131,11 +141,17 @@ public final class Next extends PlayerRelatedCommands {
             }
             currentPlayer.getSituationPodcasts().get(i).setNameEpisode(
                     podcast.getEpisodes().get(j + 1).getName());
+            // add to the wrapped
+            library.addEpisodeForUserAndHost(this.username,
+                    podcast.getEpisodes().get(j + 1), podcast.getOwner());
         } else if (currentPlayer.getRepeat() == 1) {
             currentPlayer.setRepeat(0);
         }
         currentPlayer.getSituationPodcasts().get(i).setMinute(0);
         currentPlayer.setPaused(false);
+        // add to the wrapped
+        library.addEpisodeForUserAndHost(this.username,
+                podcast.getEpisodes().get(j), podcast.getOwner());
     }
 
     /**
@@ -156,12 +172,16 @@ public final class Next extends PlayerRelatedCommands {
                 currentPlayer.setRemainedTime(currentPlayer.getSong().getDuration());
             }
             currentPlayer.setPaused(false);
+            // add to the wrapped
+            library.addSongForUser(this.username, currentPlayer.getSong());
             return;
         }
         index = index + 1;
         currentPlayer.setSong(currentPlayer.getAlbum().getSongs().get(index));
         currentPlayer.setRemainedTime(currentPlayer.getSong().getDuration());
         currentPlayer.setPaused(false);
+        // add to the wrapped
+        library.addSongForUser(this.username, currentPlayer.getSong());
     }
 
     /**
@@ -184,6 +204,8 @@ public final class Next extends PlayerRelatedCommands {
                 currentPlayer.setRemainedTime(currentPlayer.getSong().getDuration());
             }
             currentPlayer.setPaused(false);
+            // add to the wrapped
+            library.addSongForUser(this.username, currentPlayer.getSong());
             return;
         }
         songIndexShuffle = songIndexShuffle + 1;
@@ -191,6 +213,8 @@ public final class Next extends PlayerRelatedCommands {
         currentPlayer.setSong(currentPlayer.getAlbum().getSongs().get(index));
         currentPlayer.setRemainedTime(currentPlayer.getSong().getDuration());
         currentPlayer.setPaused(false);
+        // add to the wrapped
+        library.addSongForUser(this.username, currentPlayer.getSong());
     }
 
     /**
@@ -203,6 +227,8 @@ public final class Next extends PlayerRelatedCommands {
                 if (currentPlayer.getRepeat() == 2) {
                     currentPlayer.setRemainedTime(currentPlayer.getSong().getDuration());
                     currentPlayer.setPaused(false);
+                    // add to the wrapped
+                    library.addSongForUser(this.username, currentPlayer.getSong());
                 } else {
                     int songIndex = currentPlayer.playlistIndex();
                     if (currentPlayer.isShuffle()) {
@@ -216,6 +242,8 @@ public final class Next extends PlayerRelatedCommands {
             default -> {
                 if (currentPlayer.getRepeat() == 2) {
                     currentPlayer.setRemainedTime(currentPlayer.getSong().getDuration());
+                    // add to the wrapped
+                    library.addSongForUser(this.username, currentPlayer.getSong());
                 } else {
                     int songIndex = currentPlayer.albumIndex();
                     if (currentPlayer.isShuffle()) {

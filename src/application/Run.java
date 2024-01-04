@@ -4,6 +4,7 @@ import application.commands.admin.AddUser;
 import application.commands.admin.DeleteUser;
 import application.commands.admin.ShowAlbums;
 import application.commands.admin.ShowPodcasts;
+import application.commands.admin.Wrapped;
 import application.commands.player.AddRemoveInPlaylist;
 import application.commands.player.Backward;
 import application.commands.player.Forward;
@@ -45,10 +46,12 @@ import application.entities.library.Episode;
 import application.entities.library.Library;
 import application.entities.library.Podcast;
 import application.entities.library.Song;
-import application.entities.library.users.User;
+import application.entities.library.users.AccountArtist;
+import application.entities.library.users.normal.User;
 import application.entities.player.Player;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.input.EpisodeInput;
 import fileio.input.LibraryInput;
 import fileio.input.PodcastInput;
@@ -90,6 +93,7 @@ public final class Run {
         ArrayList<Song> songs = new ArrayList<>();
         ArrayList<Podcast> podcasts = new ArrayList<>();
         ArrayList<User> users = new ArrayList<>();
+        ArrayList<AccountArtist> accounts =  new ArrayList<>();
         // move each song
         for (SongInput inputSong: libraryInput.getSongs()) {
             Song newInputSong = new Song(inputSong.getName(),
@@ -98,6 +102,17 @@ public final class Run {
                     inputSong.getGenre(), inputSong.getReleaseYear(),
                     inputSong.getArtist());
             songs.add(newInputSong);
+            // we create an account for each new artist on the platform
+            boolean tOrF = false;
+            for (AccountArtist iterAccount: accounts) {
+                if (iterAccount.getUsername().equals(newInputSong.getArtist())) {
+                    tOrF = true;
+                    break;
+                }
+            }
+            if (!tOrF) {
+                accounts.add(new AccountArtist(newInputSong.getArtist()));
+            }
         }
         // move each user
         for (UserInput inputUser: libraryInput.getUsers()) {
@@ -117,7 +132,7 @@ public final class Run {
                     inputPodcast.getOwner(), episodes);
             podcasts.add(newInputPodcast);
         }
-        return new Library(songs, podcasts, users);
+        return new Library(songs, podcasts, users, accounts);
     }
 
     /**
@@ -136,6 +151,41 @@ public final class Run {
         INSTANCE_RUN.objectMapper = objectMapperInput;
         INSTANCE_RUN.globalPlaylistId = null;
         INSTANCE_RUN.players = new ArrayList<>();
+    }
+
+    /**
+     * This method prints the status of all artists accounts
+     */
+    public void endProgram() {
+        ObjectNode node = objectMapper.createObjectNode();
+        node.put("command", "endProgram");
+        // new node for results;
+        ObjectNode node1 = objectMapper.createObjectNode();
+        // we sort the accounts;
+        library.sortAccounts();
+        // we start printing each account
+        for (int i = 0; i < library.getAccountsAllArtists().size(); i++) {
+            // temp account
+            AccountArtist tempAccount = library.getAccountsAllArtists().get(i);
+            // we check if the artist was played at all
+            if (!tempAccount.isPlayedOrNot()) {
+                continue;
+            }
+            // temp node
+            ObjectNode iterNode = objectMapper.createObjectNode();
+            // we round the numbers
+            tempAccount.roundDoubles();
+            iterNode.put("songRevenue", tempAccount.getSongRevenue());
+            iterNode.put("merchRevenue", tempAccount.getMerchRevenue());
+            iterNode.put("ranking", i + 1);
+            iterNode.put("mostProfitableSong", "N/A");
+            // set the artist
+            node1.set(tempAccount.getUsername(), iterNode);
+        }
+        // we set it
+        node.set("result", node1);
+        // add to outputs
+        outputs.add(node);
     }
 
     /**
@@ -386,9 +436,15 @@ public final class Run {
                             command.getName(), library, players);
                     removePodcast.startCommand(objectMapper, outputs);
                 }
+                case "wrapped" -> {
+                    Wrapped wrapped = new Wrapped(command.getCommand(), command.getUsername(),
+                            command.getTimestamp(), library, players);
+                    wrapped.startCommand(objectMapper, outputs);
+                }
                 default -> { }
             }
         }
+        this.endProgram();
     }
 
     public void setObjectMapper(final ObjectMapper objectMapper) {

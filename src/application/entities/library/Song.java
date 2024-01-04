@@ -19,12 +19,16 @@ public final class Song {
     private Integer releaseYear;
     private String artist;
     private Integer likes;
+    private Integer listens;
+    private Double revenue;
 
     /**
      * Default constructor
      */
     public Song() {
         this.likes = 0;
+        this.listens = 0;
+        this.revenue = (double) 0;
     }
 
     /**
@@ -50,6 +54,8 @@ public final class Song {
         this.releaseYear = releaseYear;
         this.artist = artist;
         this.likes = 0;
+        this.listens = 0;
+        this.revenue = (double) 0;
     }
 
     /**
@@ -97,6 +103,13 @@ public final class Song {
         likes--;
     }
 
+    /**
+     * Adds one more listening to the song
+     */
+    public void addListen() {
+        listens++;
+    }
+
     public void setName(final String name) {
         this.name = name;
     }
@@ -129,4 +142,14 @@ public final class Song {
         this.artist = artist;
     }
 
+    public void setLikes(final Integer likes) {
+        this.likes = likes;
+    }
+    public void setListens(final Integer listens) {
+        this.listens = listens;
+    }
+
+    public void setRevenue(final Double revenue) {
+        this.revenue = revenue;
+    }
 }

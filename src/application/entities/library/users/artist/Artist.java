@@ -194,4 +194,12 @@ public final class Artist implements UserDatabase, Page {
     public void setAlbums(final ArrayList<Album> albums) {
         this.albums = albums;
     }
+
+    public void setEvents(final ArrayList<Event> events) {
+        this.events = events;
+    }
+
+    public void setMerchandise(final ArrayList<Merch> merchandise) {
+        this.merchandise = merchandise;
+    }
 }

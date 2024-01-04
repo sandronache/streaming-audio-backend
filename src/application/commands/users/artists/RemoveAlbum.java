@@ -4,7 +4,7 @@ import application.commands.root.PlayerRelatedCommands;
 import application.entities.library.Library;
 import application.entities.library.Playlist;
 import application.entities.library.Song;
-import application.entities.library.users.User;
+import application.entities.library.users.normal.User;
 import application.entities.library.users.artist.Album;
 import application.entities.library.users.artist.Artist;
 import application.entities.player.Player;
