@@ -103,6 +103,8 @@ public final class AddEvent implements Commands {
         // if all the checks were good we add the new event
         Event newEvent = new Event(name, description, date);
         artist.getEvents().add(newEvent);
+        // we also send notification if possible
+        artist.sendNotificationIfPossible(2);
         node.put("message", username + " has added new event successfully.");
         outputs.add(node);
     }

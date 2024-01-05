@@ -275,10 +275,23 @@ public final class Library {
      * @param revenue
      * @param usernameParam
      */
-    public void addRevenue(final Double revenue, final String usernameParam) {
+    public void addRevenueSong(final Double revenue, final String usernameParam) {
         for (AccountArtist accountsAllArtist : accountsAllArtists) {
             if (accountsAllArtist.getUsername().equals(usernameParam)) {
                 accountsAllArtist.addRevenueSong(revenue);
+            }
+        }
+    }
+    /**
+     * Method that adds revenue corresponding to the artist given as parameter
+     * @param revenue
+     * @param usernameParam
+     */
+    public void addRevenueMerchandise(final Double revenue, final String usernameParam) {
+        for (AccountArtist accountsAllArtist : accountsAllArtists) {
+            if (accountsAllArtist.getUsername().equals(usernameParam)) {
+                accountsAllArtist.addRevenueMerchandise(revenue);
+                accountsAllArtist.gotPlayed();
             }
         }
     }

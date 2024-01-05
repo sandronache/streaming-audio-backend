@@ -36,6 +36,8 @@ public final class User implements UserDatabase {
     private WrappedUser wrapped;
     private boolean premium;
     private PremiumStatus premiumStatus;
+    private ArrayList<String> boughtMerchandise;
+    private ArrayList<String> notifications;
 
     /**
      * Default constructor
@@ -69,6 +71,8 @@ public final class User implements UserDatabase {
         this.wrapped = new WrappedUser();
         this.premium = false;
         this.premiumStatus =  new PremiumStatus();
+        this.boughtMerchandise = new ArrayList<>();
+        this.notifications = new ArrayList<>();
     }
 
     /**
@@ -107,6 +111,8 @@ public final class User implements UserDatabase {
         this.wrapped = new WrappedUser();
         this.premium = false;
         this.premiumStatus =  new PremiumStatus();
+        this.boughtMerchandise = new ArrayList<>();
+        this.notifications = new ArrayList<>();
         libraryParam.getUsers().add(this);
     }
 
@@ -169,7 +175,7 @@ public final class User implements UserDatabase {
             // we calculate the revenue
             double calculatedRevenue = (double) (1000000 * totalSongsPerArtist) / totalSongs;
             // we add the revenue
-            library.addRevenue(calculatedRevenue, currentArtist.getUsername());
+            library.addRevenueSong(calculatedRevenue, currentArtist.getUsername());
             // we add the revenue for each song
             premiumStatus.getStates().get(i).addRevenueToEachSong(calculatedRevenue);
         }
@@ -180,6 +186,20 @@ public final class User implements UserDatabase {
         this.setPremium(false);
     }
 
+    /**
+     * Method that adds a notification
+     * @param notification
+     */
+    public void addNotification(final String notification) {
+        notifications.add(notification);
+    }
+
+    /**
+     * Method that clears all notifications
+     */
+    public void clearNotifications() {
+        notifications.clear();
+    }
     public void setUsername(final String username) {
         this.username = username;
     }
@@ -258,5 +278,13 @@ public final class User implements UserDatabase {
 
     public void setPremiumStatus(final PremiumStatus premiumStatus) {
         this.premiumStatus = premiumStatus;
+    }
+
+    public void setBoughtMerchandise(final ArrayList<String> boughtMerchandise) {
+        this.boughtMerchandise = boughtMerchandise;
+    }
+
+    public void setNotifications(final ArrayList<String> notifications) {
+        this.notifications = notifications;
     }
 }

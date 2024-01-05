@@ -5,6 +5,10 @@ import application.commands.admin.DeleteUser;
 import application.commands.admin.ShowAlbums;
 import application.commands.admin.ShowPodcasts;
 import application.commands.admin.Wrapped;
+import application.commands.admin.merchandise.BuyMerch;
+import application.commands.admin.merchandise.SeeMerch;
+import application.commands.admin.notifications.GetNotifications;
+import application.commands.admin.notifications.Subscribe;
 import application.commands.admin.premium.BuyPremium;
 import application.commands.admin.premium.CancelPremium;
 import application.commands.player.AddRemoveInPlaylist;
@@ -492,6 +496,30 @@ public final class Run {
                             command.getUsername(), command.getTimestamp(),
                             library, players);
                     cancelPremium.startCommand(objectMapper, outputs);
+                }
+                case "seeMerch" -> {
+                    SeeMerch seeMerch = new SeeMerch(command.getCommand(),
+                            command.getUsername(), command.getTimestamp(),
+                            library);
+                    seeMerch.startCommand(objectMapper, outputs);
+                }
+                case "buyMerch" -> {
+                    BuyMerch buyMerch = new BuyMerch(command.getCommand(),
+                            command.getUsername(), command.getTimestamp(),
+                            command.getName(), library);
+                    buyMerch.startCommand(objectMapper, outputs);
+                }
+                case "subscribe" -> {
+                    Subscribe subscribe =  new Subscribe(command.getCommand(),
+                            command.getUsername(), command.getTimestamp(),
+                            library);
+                    subscribe.startCommand(objectMapper, outputs);
+                }
+                case "getNotifications" -> {
+                    GetNotifications getNotifications = new GetNotifications(command.getCommand(),
+                            command.getUsername(), command.getTimestamp(),
+                            library);
+                    getNotifications.startCommand(objectMapper, outputs);
                 }
                 default -> { }
             }

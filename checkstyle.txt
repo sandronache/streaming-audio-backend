@@ -11,7 +11,7 @@ Starting audit...
 [ERROR] D:\College\an2\POO\tema3\.\src\application\entities\library\users\AccountArtist.java:32:57: '100.0' is a magic number. [MagicNumber]
 [ERROR] D:\College\an2\POO\tema3\.\src\application\entities\library\users\AccountArtist.java:33:50: '100.0' is a magic number. [MagicNumber]
 [ERROR] D:\College\an2\POO\tema3\.\src\application\entities\library\users\AccountArtist.java:33:59: '100.0' is a magic number. [MagicNumber]
-[ERROR] D:\College\an2\POO\tema3\.\src\application\entities\library\users\normal\User.java:170:50: '1000000' is a magic number. [MagicNumber]
-[ERROR] D:\College\an2\POO\tema3\.\src\application\Run.java:237:5: Method length is 267 lines (max allowed is 150). [MethodLength]
+[ERROR] D:\College\an2\POO\tema3\.\src\application\entities\library\users\normal\User.java:176:50: '1000000' is a magic number. [MagicNumber]
+[ERROR] D:\College\an2\POO\tema3\.\src\application\Run.java:241:5: Method length is 291 lines (max allowed is 150). [MethodLength]
 Audit done.
 Checkstyle ends with 14 errors.

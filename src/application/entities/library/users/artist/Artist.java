@@ -3,6 +3,7 @@ package application.entities.library.users.artist;
 import application.entities.library.Library;
 import application.entities.library.Song;
 import application.entities.library.users.UserDatabase;
+import application.entities.library.users.normal.User;
 import application.entities.pages.Page;
 import application.entities.pages.visitor.PageVisitor;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public final class Artist implements UserDatabase, Page {
     private ArrayList<Album> albums;
     private ArrayList<Event> events;
     private ArrayList<Merch> merchandise;
+    private ArrayList<User> subscribers;
 
     /**
      * Function that builds an object(Artist)
@@ -37,6 +39,7 @@ public final class Artist implements UserDatabase, Page {
         this.albums = new ArrayList<>();
         this.events = new ArrayList<>();
         this.merchandise = new ArrayList<>();
+        this.subscribers = new ArrayList<>();
         libraryParam.getArtists().add(this);
     }
 
@@ -192,6 +195,65 @@ public final class Artist implements UserDatabase, Page {
         return result;
     }
 
+    /**
+     * Method that gets the price for a merch with the name
+     * given as parameter
+     * @param nameParam
+     * @return
+     */
+    public Integer getPriceMerch(final String nameParam) {
+        for (Merch merch: merchandise) {
+            if (merch.getName().equals(nameParam)) {
+                return merch.getPrice();
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * This method sends a notification if possible depending on the type given
+     * @param type
+     */
+    public void sendNotificationIfPossible(final Integer type) {
+        for (User subscriber : subscribers) {
+            if (type == 0) {
+                // means an album
+                subscriber.addNotification("New Album from " + this.username + ".");
+            }
+            if (type == 1) {
+                // means a merch
+                subscriber.addNotification("New Merchandise from " + this.username + ".");
+            }
+            if (type == 2) {
+                // means an event
+                subscriber.addNotification("New Event from " + this.username + ".");
+            }
+        }
+    }
+
+    /**
+     * Method that returns true if the user subscribed or false if he unsubscribed
+     * @param userParam
+     * @return
+     */
+    public boolean unsubscribeOrSubscribeUser(final User userParam) {
+        User tempUser = null;
+        for (User subscriber: subscribers) {
+            if (subscriber.getUsername()
+                    .equals(userParam.getUsername())) {
+                tempUser = subscriber;
+                break;
+            }
+        }
+        if (tempUser == null) {
+            subscribers.add(userParam);
+            return true;
+        } else {
+            subscribers.remove(userParam);
+        }
+        return false;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(username, age, city, albums, events, merchandise);
@@ -219,5 +281,8 @@ public final class Artist implements UserDatabase, Page {
 
     public void setMerchandise(final ArrayList<Merch> merchandise) {
         this.merchandise = merchandise;
+    }
+    public void setSubscribers(final ArrayList<User> subscribers) {
+        this.subscribers = subscribers;
     }
 }

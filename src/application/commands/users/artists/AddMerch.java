@@ -90,6 +90,8 @@ public final class AddMerch implements Commands {
         // if all the checks were good we add the new merch
         Merch newMerch = new Merch(name, description, price);
         artist.getMerchandise().add(newMerch);
+        // we also send notification if possible
+        artist.sendNotificationIfPossible(1);
         node.put("message", username + " has added new merchandise successfully.");
         outputs.add(node);
     }

@@ -89,6 +89,9 @@ public final class FollowPlaylist implements Commands {
                         playlist.addFollower(this.username);
                         library.getUser(this.username).addLikedPlaylist(playlist);
                         node.put("message", "Playlist followed successfully.");
+                        // we also send a notification
+                        user1.addNotification("New follower to playlist "
+                                + playlist.getName());
                         outputs.add(node);
                         user.setLastSelected(null);
                         return;
@@ -107,12 +110,18 @@ public final class FollowPlaylist implements Commands {
                         user.removeLikedPlaylist(playlist);
                         node.put("message",
                                 "Playlist unfollowed successfully.");
+                        // we also send a notification
+                        user1.addNotification("One less follower to playlist "
+                                + playlist.getName());
                     } else {
                         playlist.addFollower(this.username);
                         playlist.setFollowers(playlist.getFollowers() + 1);
                         user.addLikedPlaylist(playlist);
                         node.put("message",
                                 "Playlist followed successfully.");
+                        // we also send a notification
+                        user1.addNotification("New follower to playlist "
+                                + playlist.getName());
                     }
                     user.setAsideLastSelected(user.getLastSelected());
                     user.setLastSelected(null);

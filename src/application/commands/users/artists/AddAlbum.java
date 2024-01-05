@@ -115,6 +115,8 @@ public final class AddAlbum implements Commands {
         library.addAlbumSongs(songs);
         Album newAlbum = new Album(name, releaseYear, description, songs);
         artist.getAlbums().add(newAlbum);
+        // we also send notification if possible
+        artist.sendNotificationIfPossible(0);
         node.put("message", username + " has added new album successfully.");
         outputs.add(node);
     }

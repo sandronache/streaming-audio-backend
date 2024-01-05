@@ -49,6 +49,15 @@ public final class AccountArtist {
         songRevenue += revenueParam;
     }
 
+    /**
+     * Method that adds revenue for a merch
+     * @param revenueParam
+     */
+    public void addRevenueMerchandise(final Double revenueParam) {
+        totalRevenue += revenueParam;
+        merchRevenue += revenueParam;
+    }
+
     public void setUsername(final String username) {
         this.username = username;
     }

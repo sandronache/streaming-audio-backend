@@ -24,6 +24,7 @@ public final class Host implements UserDatabase, Page {
     private ArrayList<Podcast> podcasts;
     private ArrayList<Announcement> announcements;
     private ArrayList<User> listeners;
+    private ArrayList<User> subscribers;
 
     /**
      * Function that builds an object(Host)
@@ -40,6 +41,7 @@ public final class Host implements UserDatabase, Page {
         this.podcasts = new ArrayList<>();
         this.announcements = new ArrayList<>();
         this.listeners = new ArrayList<>();
+        this.subscribers = new ArrayList<>();
         libraryParam.getHosts().add(this);
     }
 
@@ -149,6 +151,46 @@ public final class Host implements UserDatabase, Page {
         listeners.add(userParam);
     }
 
+    /**
+     * This method sends a notification if possible depending on the type given
+     * @param type
+     */
+    public void sendNotificationIfPossible(final Integer type) {
+        for (User subscriber : subscribers) {
+            if (type == 0) {
+                // means a podcast
+                subscriber.addNotification("New Podcast from " + this.username + ".");
+            }
+            if (type == 1) {
+                // means an announcement
+                subscriber.addNotification("New Announcement from " + this.username + ".");
+            }
+        }
+    }
+
+    /**
+     * Method that returns true if the user subscribed or false if he unsubscribed
+     * @param userParam
+     * @return
+     */
+    public boolean unsubscribeOrSubscribeUser(final User userParam) {
+        User tempUser = null;
+        for (User subscriber: subscribers) {
+            if (subscriber.getUsername()
+                    .equals(userParam.getUsername())) {
+                tempUser = subscriber;
+                break;
+            }
+        }
+        if (tempUser == null) {
+            subscribers.add(userParam);
+            return true;
+        } else {
+            subscribers.remove(userParam);
+        }
+        return false;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -192,5 +234,9 @@ public final class Host implements UserDatabase, Page {
 
     public void setListeners(final ArrayList<User> listeners) {
         this.listeners = listeners;
+    }
+
+    public void setSubscribers(final ArrayList<User> subscribers) {
+        this.subscribers = subscribers;
     }
 }

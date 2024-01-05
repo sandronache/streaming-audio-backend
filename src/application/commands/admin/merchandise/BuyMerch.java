@@ -1,48 +1,45 @@
-package application.commands.users.hosts;
+package application.commands.admin.merchandise;
 
 import application.commands.root.Commands;
 import application.entities.library.Library;
-import application.entities.library.users.host.Announcement;
-import application.entities.library.users.host.Host;
+import application.entities.library.users.artist.Artist;
+import application.entities.library.users.normal.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 
 /**
- * Class for addAnnouncement command
+ * Class for buy merch command
  */
 @Getter
-public final class AddAnnouncement implements Commands {
+public final class BuyMerch implements Commands {
     private String command;
     private String username;
     private Integer timestamp;
-    private Library library;
     private String name;
-    private String description;
+    private Library library;
 
     /**
      * Constructor
      * @param command
      * @param username
      * @param timestamp
-     * @param library
      * @param name
-     * @param description
+     * @param library
      */
-    public AddAnnouncement(final String command, final String username, final Integer timestamp,
-                      final Library library, final String name, final String description) {
+    public BuyMerch(final String command, final String username,
+                    final Integer timestamp, final String name,
+                    final Library library) {
         this.command = command;
         this.username = username;
         this.timestamp = timestamp;
-        this.library = library;
         this.name = name;
-        this.description = description;
+        this.library = library;
     }
 
     /**
-     * Starting point of the command
-     * Makes the required changes and prints accordingly
+     * The starting point for this command
      * @param objectMapper
      * @param outputs
      */
@@ -52,37 +49,35 @@ public final class AddAnnouncement implements Commands {
         node.put("command", this.getCommand());
         node.put("user", this.getUsername());
         node.put("timestamp", this.getTimestamp());
-
         // we check if the username exists
-        if (library.typeOfUser(username) == 0) {
-            node.put("message", "The username " + username + " doesn't exist.");
+        if (library.getUser(username) == null) {
+            node.put("message", "The username " + username + " doesn't exists.");
             outputs.add(node);
             return;
         }
-
-        // we check if this username is a host
-        if (library.typeOfUser(username) != 2) {
-            node.put("message", username + " is not a host.");
+        // we get the user
+        User user =  library.getUser(username);
+        // we check if we are on the page of an artist
+        if (user.getPage().whichPage() != 2) {
+            node.put("message", "Cannot buy merch from this page.");
             outputs.add(node);
             return;
         }
-
-        Host host = library.getHost(username);
-        // we check if this host already has this announcement
-        if (host.checkIfAnnouncementExists(name)) {
-            node.put("message", username + " has already added an announcement with this name.");
+        // we check if the merch exists, and if true we add it to our purchases
+        Artist tempArtist = (Artist) user.getPage();
+        if (!tempArtist.checkIfMerchExists(name)) {
+            node.put("message", "The merch " + name + " doesn't exist.");
             outputs.add(node);
             return;
         }
-
-        Announcement announcement = new Announcement(name, description);
-        host.getAnnouncements().add(announcement);
-        // we also send notifications if we have subscribers
-        host.sendNotificationIfPossible(1);
-        node.put("message", username + " has successfully added new announcement.");
+        // we add the new merch
+        user.getBoughtMerchandise().add(name);
+        // we add the purchase to the account of the artist
+        library.addRevenueMerchandise((double) tempArtist.getPriceMerch(name),
+                tempArtist.getUsername());
+        node.put("message", username + " has added new merch successfully.");
         outputs.add(node);
     }
-
     public void setCommand(final String command) {
         this.command = command;
     }
@@ -101,10 +96,6 @@ public final class AddAnnouncement implements Commands {
 
     public void setName(final String name) {
         this.name = name;
-    }
-
-    public void setDescription(final String description) {
-        this.description = description;
     }
 
 }

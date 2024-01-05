@@ -128,6 +128,8 @@ public final class AddPodcast implements Commands {
         library.getPodcasts().add(podcast);
         // to the podcast
         host.getPodcasts().add(podcast);
+        // we also send notifications if we have subscribers
+        host.sendNotificationIfPossible(0);
         // in situation podcast from players
         this.updateSituationsPodcastPlayers(podcast);
         node.put("message", username + " has added new podcast successfully.");
