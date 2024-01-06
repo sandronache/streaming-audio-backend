@@ -81,6 +81,8 @@ public final class Select implements Commands {
             Artist artist = library.getArtist(user.getLastSelected());
             // the user goes on that page
             user.setPage(artist);
+            // we add the new page we are at to the history
+            user.addPageToHistory(user.getPage());
             node.put("message", "Successfully selected " + user.getLastSelected() + "'s page.");
             outputs.add(node);
             // reset
@@ -92,6 +94,8 @@ public final class Select implements Commands {
             Host host = library.getHost(user.getLastSelected());
             // the user goes on that page
             user.setPage(host);
+            // we add the new page we are at to the history
+            user.addPageToHistory(user.getPage());
             node.put("message", "Successfully selected " + user.getLastSelected() + "'s page.");
             outputs.add(node);
             // reset

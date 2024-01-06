@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public final class HomePage implements Page {
     private ArrayList<Song> songs;
     private ArrayList<Playlist> playlists;
+    private ArrayList<Song> recommendedSongs;
+    private ArrayList<Playlist> recommendedPlaylists;
 
     /**
      * Default constructor
@@ -21,6 +23,8 @@ public final class HomePage implements Page {
     public HomePage() {
         songs = new ArrayList<>();
         playlists = new ArrayList<>();
+        recommendedSongs = new ArrayList<>();
+        recommendedPlaylists = new ArrayList<>();
     }
 
     /**
@@ -49,4 +53,11 @@ public final class HomePage implements Page {
         this.playlists = playlists;
     }
 
+    public void setRecommendedSongs(final ArrayList<Song> recommendedSongs) {
+        this.recommendedSongs = recommendedSongs;
+    }
+
+    public void setRecommendedPlaylists(final ArrayList<Playlist> recommendedPlaylists) {
+        this.recommendedPlaylists = recommendedPlaylists;
+    }
 }

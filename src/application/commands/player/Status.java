@@ -52,6 +52,15 @@ public final class Status extends PlayerRelatedCommands {
 
         Player currentPlayer = this.getCurrentPlayer(players, this.getUsername());
         if (currentPlayer == null) {
+            ObjectNode node1 = objectMapper.createObjectNode();
+            boolean temp = true;
+            node1.put("name", "");
+            node1.put("remainedTime", 0);
+            node1.put("repeat", "No Repeat");
+            node1.put("shuffle", !temp);
+            node1.put("paused", temp);
+            node.set("stats", node1);
+            outputs.add(node);
             return;
         }
 

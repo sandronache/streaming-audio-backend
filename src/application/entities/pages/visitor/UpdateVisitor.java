@@ -111,6 +111,16 @@ public final class UpdateVisitor implements PageVisitor {
         } else {
             page.setPlaylists(user.getFollowedPlaylists());
         }
+        // move the recommendedSongs
+        if (!user.getRecommendedSongs().isEmpty()) {
+            ArrayList<Song> tempRecSongs = new ArrayList<>(user.getRecommendedSongs());
+            page.setRecommendedSongs(tempRecSongs);
+        }
+        // move the recommendedPlaylists
+        if (!user.getRecommendedPlaylists().isEmpty()) {
+            ArrayList<Playlist> tempRecPlaylists = new ArrayList<>(user.getRecommendedPlaylists());
+            page.setRecommendedPlaylists(tempRecPlaylists);
+        }
     }
 
     public void setUser(final User user) {

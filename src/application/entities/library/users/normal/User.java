@@ -7,6 +7,7 @@ import application.entities.library.users.UserDatabase;
 import application.entities.library.users.artist.Artist;
 import application.entities.library.users.normal.premium.PremiumStatus;
 import application.entities.pages.HomePage;
+import application.entities.pages.LikedContentPage;
 import application.entities.pages.Page;
 import application.entities.pages.visitor.PageVisitor;
 import lombok.Getter;
@@ -38,6 +39,10 @@ public final class User implements UserDatabase {
     private PremiumStatus premiumStatus;
     private ArrayList<String> boughtMerchandise;
     private ArrayList<String> notifications;
+    private ArrayList<Page> pageHistory;
+    private Integer currentPositionPH;
+    private ArrayList<Song> recommendedSongs;
+    private ArrayList<Playlist> recommendedPlaylists;
 
     /**
      * Default constructor
@@ -73,6 +78,11 @@ public final class User implements UserDatabase {
         this.premiumStatus =  new PremiumStatus();
         this.boughtMerchandise = new ArrayList<>();
         this.notifications = new ArrayList<>();
+        this.pageHistory = new ArrayList<>();
+        this.pageHistory.add(this.page);
+        this.currentPositionPH = 0;
+        this.recommendedPlaylists = new ArrayList<>();
+        this.recommendedSongs = new ArrayList<>();
     }
 
     /**
@@ -113,7 +123,63 @@ public final class User implements UserDatabase {
         this.premiumStatus =  new PremiumStatus();
         this.boughtMerchandise = new ArrayList<>();
         this.notifications = new ArrayList<>();
+        this.pageHistory = new ArrayList<>();
+        this.pageHistory.add(this.page);
+        this.currentPositionPH = 0;
+        this.recommendedPlaylists = new ArrayList<>();
+        this.recommendedSongs = new ArrayList<>();
         libraryParam.getUsers().add(this);
+    }
+
+    /**
+     * Adds a new page to history
+     * @param pageParam
+     */
+    public void addPageToHistory(final Page pageParam) {
+        this.pageHistory.add(pageParam);
+        this.currentPositionPH += 1;
+    }
+
+    /**
+     * Go back
+     */
+    public void previousPage() {
+        currentPositionPH--;
+    }
+
+    /**
+     * This method goes to the new page after changing the
+     * cursor in the history of pages
+     */
+    public void changePage() {
+        // we get the page
+        Page newPage = pageHistory.get(currentPositionPH);
+        // we verify the type and put the page accordingly
+        if (newPage.whichPage() == 0) {
+            page = new HomePage();
+        } else if (newPage.whichPage() == 1) {
+            page = new LikedContentPage();
+        } else if (newPage.whichPage() == 2) {
+            page = newPage;
+        } else {
+            page = newPage;
+        }
+    }
+
+    /**
+     * Go forward
+     */
+    public void nextPage() {
+        currentPositionPH++;
+    }
+
+    /**
+     * Resets the forward after a "change page command"
+     */
+    public void resetForward() {
+        if (currentPositionPH < pageHistory.size() - 1) {
+            pageHistory = new ArrayList<>(pageHistory.subList(0, currentPositionPH + 1));
+        }
     }
 
     /**
@@ -199,6 +265,22 @@ public final class User implements UserDatabase {
      */
     public void clearNotifications() {
         notifications.clear();
+    }
+
+    /**
+     * Adds a new recommended song
+     * @param songParam
+     */
+    public void addRecommendedSong(final Song songParam) {
+        recommendedSongs.add(songParam);
+    }
+
+    /**
+     * Adds a new recommended playlist
+     * @param playlistParam
+     */
+    public void addRecommendedPlaylist(final Playlist playlistParam) {
+        recommendedPlaylists.add(playlistParam);
     }
     public void setUsername(final String username) {
         this.username = username;
@@ -286,5 +368,21 @@ public final class User implements UserDatabase {
 
     public void setNotifications(final ArrayList<String> notifications) {
         this.notifications = notifications;
+    }
+
+    public void setPageHistory(final ArrayList<Page> pageHistory) {
+        this.pageHistory = pageHistory;
+    }
+
+    public void setCurrentPositionPH(final Integer currentPositionPH) {
+        this.currentPositionPH = currentPositionPH;
+    }
+
+    public void setRecommendedSongs(final ArrayList<Song> recommendedSongs) {
+        this.recommendedSongs = recommendedSongs;
+    }
+
+    public void setRecommendedPlaylists(final ArrayList<Playlist> recommendedPlaylists) {
+        this.recommendedPlaylists = recommendedPlaylists;
     }
 }

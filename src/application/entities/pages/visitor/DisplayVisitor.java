@@ -172,6 +172,22 @@ public final class DisplayVisitor implements PageVisitor {
                 string += ", ";
             }
         }
+        string += "]\n\nSong recommendations:\n\t[";
+        for (int i = 0; i < page.getRecommendedSongs().size() && i < FIVE; i++) {
+            string += page.getRecommendedSongs().get(i).getName();
+            if (i != (page.getRecommendedSongs().size() - 1)
+                    && i != FOUR) {
+                string += ", ";
+            }
+        }
+        string += "]\n\nPlaylists recommendations:\n\t[";
+        for (int i = 0; i < page.getRecommendedPlaylists().size() && i < FIVE; i++) {
+            string += page.getRecommendedPlaylists().get(i).getName();
+            if (i != (page.getRecommendedPlaylists().size() - 1)
+                    && i != FOUR) {
+                string += ", ";
+            }
+        }
         string += "]";
         node.put("message", string);
     }

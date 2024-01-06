@@ -11,6 +11,7 @@ import application.commands.admin.notifications.GetNotifications;
 import application.commands.admin.notifications.Subscribe;
 import application.commands.admin.premium.BuyPremium;
 import application.commands.admin.premium.CancelPremium;
+import application.commands.admin.recommendations.UpdateRecommendations;
 import application.commands.player.AddRemoveInPlaylist;
 import application.commands.player.Backward;
 import application.commands.player.Forward;
@@ -46,6 +47,8 @@ import application.commands.users.hosts.RemoveAnnouncement;
 import application.commands.users.hosts.RemovePodcast;
 import application.commands.users.normal.SwitchConnectionStatus;
 import application.commands.users.normal.pages.ChangePage;
+import application.commands.users.normal.pages.NextPage;
+import application.commands.users.normal.pages.PreviousPage;
 import application.commands.users.normal.pages.PrintCurrentPage;
 import application.entities.input.Command;
 import application.entities.library.Episode;
@@ -444,7 +447,7 @@ public final class Run {
                 case "changePage" -> {
                     ChangePage changePage = new ChangePage(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
-                            command.getNextPage(), library);
+                            command.getNextPage(), library, players);
                     changePage.startCommand(objectMapper, outputs);
                 }
                 case "getAllUsers" -> {
@@ -520,6 +523,25 @@ public final class Run {
                             command.getUsername(), command.getTimestamp(),
                             library);
                     getNotifications.startCommand(objectMapper, outputs);
+                }
+                case "previousPage" -> {
+                    PreviousPage previousPage = new PreviousPage(command.getCommand(),
+                            command.getUsername(), command.getTimestamp(),
+                            library, players);
+                    previousPage.startCommand(objectMapper, outputs);
+                }
+                case "nextPage" -> {
+                    NextPage nextPage = new NextPage(command.getCommand(),
+                            command.getUsername(), command.getTimestamp(),
+                            library, players);
+                    nextPage.startCommand(objectMapper, outputs);
+                }
+                case "updateRecommendations" -> {
+                    UpdateRecommendations updateRecommendations =  new UpdateRecommendations(
+                            command.getCommand(), command.getUsername(),
+                            command.getTimestamp(), command.getRecommendationType(),
+                            library, players);
+                    updateRecommendations.startCommand(objectMapper, outputs);
                 }
                 default -> { }
             }
