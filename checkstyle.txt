@@ -1,7 +1,5 @@
 Starting audit...
-[ERROR] D:\College\an2\POO\tema3\.\src\application\commands\admin\recommendations\UpdateRecommendations.java:79:58: '30' is a magic number. [MagicNumber]
-[ERROR] D:\College\an2\POO\tema3\.\src\application\commands\admin\recommendations\UpdateRecommendations.java:99:54: ',' is preceded with whitespace. [NoWhitespaceBefore]
-[ERROR] D:\College\an2\POO\tema3\.\src\application\commands\admin\recommendations\UpdateRecommendations.java:103:26: ',' is preceded with whitespace. [NoWhitespaceBefore]
+[ERROR] D:\College\an2\POO\tema3\.\src\application\commands\admin\recommendations\UpdateRecommendations.java:272:58: '30' is a magic number. [MagicNumber]
 [ERROR] D:\College\an2\POO\tema3\.\src\application\commands\users\artists\AddEvent.java:56:64: '5' is a magic number. [MagicNumber]
 [ERROR] D:\College\an2\POO\tema3\.\src\application\commands\users\artists\AddEvent.java:57:56: '6' is a magic number. [MagicNumber]
 [ERROR] D:\College\an2\POO\tema3\.\src\application\commands\users\artists\AddEvent.java:57:59: '10' is a magic number. [MagicNumber]
@@ -14,7 +12,7 @@ Starting audit...
 [ERROR] D:\College\an2\POO\tema3\.\src\application\entities\library\users\AccountArtist.java:32:57: '100.0' is a magic number. [MagicNumber]
 [ERROR] D:\College\an2\POO\tema3\.\src\application\entities\library\users\AccountArtist.java:33:50: '100.0' is a magic number. [MagicNumber]
 [ERROR] D:\College\an2\POO\tema3\.\src\application\entities\library\users\AccountArtist.java:33:59: '100.0' is a magic number. [MagicNumber]
-[ERROR] D:\College\an2\POO\tema3\.\src\application\entities\library\users\normal\User.java:242:50: '1000000' is a magic number. [MagicNumber]
-[ERROR] D:\College\an2\POO\tema3\.\src\application\Run.java:244:5: Method length is 310 lines (max allowed is 150). [MethodLength]
+[ERROR] D:\College\an2\POO\tema3\.\src\application\entities\library\users\normal\User.java:247:50: '1000000' is a magic number. [MagicNumber]
+[ERROR] D:\College\an2\POO\tema3\.\src\application\Run.java:245:5: Method length is 316 lines (max allowed is 150). [MethodLength]
 Audit done.
-Checkstyle ends with 17 errors.
+Checkstyle ends with 15 errors.

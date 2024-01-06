@@ -11,6 +11,7 @@ import application.commands.admin.notifications.GetNotifications;
 import application.commands.admin.notifications.Subscribe;
 import application.commands.admin.premium.BuyPremium;
 import application.commands.admin.premium.CancelPremium;
+import application.commands.admin.recommendations.LoadRecommendation;
 import application.commands.admin.recommendations.UpdateRecommendations;
 import application.commands.player.AddRemoveInPlaylist;
 import application.commands.player.Backward;
@@ -542,6 +543,12 @@ public final class Run {
                             command.getTimestamp(), command.getRecommendationType(),
                             library, players);
                     updateRecommendations.startCommand(objectMapper, outputs);
+                }
+                case "loadRecommendations" -> {
+                    LoadRecommendation loadRecommendation = new LoadRecommendation(
+                            command.getCommand(), command.getUsername(),
+                            command.getTimestamp(), library, players);
+                    loadRecommendation.startCommand(objectMapper, outputs);
                 }
                 default -> { }
             }

@@ -43,6 +43,9 @@ public final class User implements UserDatabase {
     private Integer currentPositionPH;
     private ArrayList<Song> recommendedSongs;
     private ArrayList<Playlist> recommendedPlaylists;
+    // 0 - no recommendations yet
+    // 1 - song ; 2 - playlist
+    private Integer lastRecommendation;
 
     /**
      * Default constructor
@@ -83,6 +86,7 @@ public final class User implements UserDatabase {
         this.currentPositionPH = 0;
         this.recommendedPlaylists = new ArrayList<>();
         this.recommendedSongs = new ArrayList<>();
+        this.lastRecommendation = 0;
     }
 
     /**
@@ -128,6 +132,7 @@ public final class User implements UserDatabase {
         this.currentPositionPH = 0;
         this.recommendedPlaylists = new ArrayList<>();
         this.recommendedSongs = new ArrayList<>();
+        this.lastRecommendation = 0;
         libraryParam.getUsers().add(this);
     }
 
@@ -273,6 +278,7 @@ public final class User implements UserDatabase {
      */
     public void addRecommendedSong(final Song songParam) {
         recommendedSongs.add(songParam);
+        lastRecommendation = 1;
     }
 
     /**
@@ -281,6 +287,7 @@ public final class User implements UserDatabase {
      */
     public void addRecommendedPlaylist(final Playlist playlistParam) {
         recommendedPlaylists.add(playlistParam);
+        lastRecommendation = 2;
     }
     public void setUsername(final String username) {
         this.username = username;
