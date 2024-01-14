@@ -1,4 +1,4 @@
-package application;
+package application.commands.root;
 
 import application.commands.admin.AddUser;
 import application.commands.admin.DeleteUser;
@@ -244,317 +244,279 @@ public final class Run {
      */
     public void startPoint() {
         for (Command command : commands) {
+            // for each command we create a new instance and we build the current command
+            Commands currentCommand = null;
             switch (command.getCommand()) {
                 case "search" -> {
-                    Search searchCommand = new Search(command.getCommand(),
+                    currentCommand = new Search(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             command.getType(), command.getFilters(), library, players);
-                    searchCommand.startCommand(objectMapper, outputs);
                 }
                 case "select" -> {
-                    Select selectCommand = new Select(command.getCommand(),
+                    currentCommand = new Select(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             command.getItemNumber(), library);
-                    selectCommand.startCommand(objectMapper, outputs);
                 }
                 case "load" -> {
-                    Load loadCommand = new Load(command.getCommand(),
+                    currentCommand = new Load(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library, players);
-                    loadCommand.startCommand(objectMapper, outputs);
                 }
                 case "playPause" -> {
-                    PlayPause playPauseCommand = new PlayPause(command.getCommand(),
+                    currentCommand = new PlayPause(command.getCommand(),
                             command.getUsername(), command.getTimestamp(), library,
                             players);
-                    playPauseCommand.startCommand(objectMapper, outputs);
                 }
                 case "repeat" -> {
-                    Repeat repeat = new Repeat(command.getCommand(),
+                    currentCommand = new Repeat(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library, players);
-                    repeat.startCommand(objectMapper, outputs);
                 }
                 case "shuffle" -> {
-                    Shuffle shuffle = new Shuffle(command.getCommand(),
+                    currentCommand = new Shuffle(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             command.getSeed(), library, players);
-                    shuffle.startCommand(objectMapper, outputs);
                 }
                 case "forward" -> {
-                    Forward forward = new Forward(command.getCommand(),
+                    currentCommand = new Forward(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library, players);
-                    forward.startCommand(objectMapper, outputs);
                 }
                 case "backward" -> {
-                    Backward backward = new Backward(command.getCommand(),
+                    currentCommand = new Backward(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library, players);
-                    backward.startCommand(objectMapper, outputs);
                 }
                 case "like" -> {
-                    Like like = new Like(command.getCommand(),
+                    currentCommand = new Like(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library, players);
-                    like.startCommand(objectMapper, outputs);
                 }
                 case "next" -> {
-                    Next next = new Next(command.getCommand(),
+                    currentCommand = new Next(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library, players);
-                    next.startCommand(objectMapper, outputs);
                 }
                 case "prev" -> {
-                    Prev prev = new Prev(command.getCommand(),
+                    currentCommand = new Prev(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library, players);
-                    prev.startCommand(objectMapper, outputs);
                 }
                 case "addRemoveInPlaylist" -> {
-                    AddRemoveInPlaylist addRemoveInPlaylist = new AddRemoveInPlaylist(
+                    currentCommand = new AddRemoveInPlaylist(
                             command.getCommand(), command.getUsername(),
                             command.getTimestamp(), command.getPlaylistId(),
                             library, players);
-                    addRemoveInPlaylist.startCommand(objectMapper, outputs);
                 }
                 case "status" -> {
-                    Status statusCommand = new Status(command.getCommand(),
+                    currentCommand = new Status(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library, players);
-                    statusCommand.startCommand(objectMapper, outputs);
                 }
                 case "createPlaylist" -> {
-                    CreatePlaylist createPlaylist = new CreatePlaylist(command.getCommand(),
+                    currentCommand = new CreatePlaylist(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             command.getPlaylistName(), globalPlaylistId, library);
-                    createPlaylist.startCommand(objectMapper, outputs);
-                    if (library.typeOfUser(createPlaylist.getUsername()) == 1
-                            && library.getUser(createPlaylist.getUsername()).isStatus()) {
-                        globalPlaylistId = createPlaylist.getGlobalPlaylistId();
-                    }
                 }
                 case "switchVisibility" -> {
-                    SwitchVisibility switchVisibility = new SwitchVisibility(
+                    currentCommand = new SwitchVisibility(
                             command.getCommand(), command.getUsername(),
                             command.getTimestamp(), command.getPlaylistId(), library);
-                    switchVisibility.startCommand(objectMapper, outputs);
                 }
                 case "follow" -> {
-                    FollowPlaylist follow = new FollowPlaylist(command.getCommand(),
+                    currentCommand = new FollowPlaylist(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library);
-                    follow.startCommand(objectMapper, outputs);
                 }
                 case "showPlaylists" -> {
-                    ShowPlaylists showPlaylists = new ShowPlaylists(command.getCommand(),
+                    currentCommand = new ShowPlaylists(command.getCommand(),
                             command.getUsername(), command.getTimestamp(), library);
-                    showPlaylists.startCommand(objectMapper, outputs);
                 }
                 case "showPreferredSongs" -> {
-                    ShowPreferredSongs showPreferredSongs = new ShowPreferredSongs(
+                    currentCommand = new ShowPreferredSongs(
                             command.getCommand(), command.getUsername(),
                             command.getTimestamp(), library);
-                    showPreferredSongs.startCommand(objectMapper, outputs);
                 }
                 case "getTop5Songs" -> {
-                    GetTop5Songs getTop5Songs = new GetTop5Songs(command.getCommand(),
+                    currentCommand = new GetTop5Songs(command.getCommand(),
                             command.getTimestamp(), library);
-                    getTop5Songs.startCommand(objectMapper, outputs);
                 }
                 case "getTop5Playlists" -> {
-                    GetTop5Playlists getTop5Playlists = new GetTop5Playlists(command.getCommand(),
+                    currentCommand = new GetTop5Playlists(command.getCommand(),
                             command.getTimestamp(), library);
-                    getTop5Playlists.startCommand(objectMapper, outputs);
                 }
                 case "switchConnectionStatus" -> {
-                    SwitchConnectionStatus switchConnectionStatus = new SwitchConnectionStatus(
+                    currentCommand = new SwitchConnectionStatus(
                             command.getCommand(), command.getUsername(),
                             command.getTimestamp(), library, players);
-                    switchConnectionStatus.startCommand(objectMapper, outputs);
                 }
                 case "getOnlineUsers" -> {
-                    GetOnlineUsers getOnlineUsers = new GetOnlineUsers(command.getCommand(),
+                    currentCommand = new GetOnlineUsers(command.getCommand(),
                             command.getTimestamp(), library);
-                    getOnlineUsers.startCommand(objectMapper, outputs);
                 }
                 case "addUser" -> {
-                    AddUser addUser = new AddUser(command.getCommand(), command.getTimestamp(),
+                    currentCommand = new AddUser(command.getCommand(), command.getTimestamp(),
                             command.getType(), library, command.getUsername(), command.getAge(),
                             command.getCity());
-                    addUser.startCommand(objectMapper, outputs);
                 }
                 case "addAlbum" -> {
-                    AddAlbum addAlbum = new AddAlbum(command.getCommand(), command.getUsername(),
+                    currentCommand = new AddAlbum(command.getCommand(), command.getUsername(),
                             command.getTimestamp(), library, command.getName(),
                             command.getReleaseYear(), command.getDescription(),
                             command.getSongs());
-                    addAlbum.startCommand(objectMapper, outputs);
                 }
                 case "addEvent" -> {
-                    AddEvent addEvent = new AddEvent(command.getCommand(), command.getUsername(),
+                    currentCommand = new AddEvent(command.getCommand(), command.getUsername(),
                             command.getTimestamp(), library, command.getName(),
                             command.getDescription(), command.getDate());
-                    addEvent.startCommand(objectMapper, outputs);
                 }
                 case "removeEvent" -> {
-                    RemoveEvent removeEvent = new RemoveEvent(command.getCommand(),
+                    currentCommand = new RemoveEvent(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             command.getName(), library);
-                    removeEvent.startCommand(objectMapper, outputs);
                 }
                 case "addMerch" -> {
-                    AddMerch addMerch = new AddMerch(command.getCommand(),
+                    currentCommand = new AddMerch(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library, command.getName(), command.getDescription(),
                             command.getPrice());
-                    addMerch.startCommand(objectMapper, outputs);
                 }
                 case "addPodcast" -> {
-                    AddPodcast addPodcast = new AddPodcast(command.getCommand(),
+                    currentCommand = new AddPodcast(command.getCommand(),
                             command.getUsername(), command.getTimestamp(), library,
                             command.getName(), command.getEpisodes(),
                             players);
-                    addPodcast.startCommand(objectMapper, outputs);
                 }
                 case "addAnnouncement" -> {
-                    AddAnnouncement addAnnouncement = new AddAnnouncement(command.getCommand(),
+                    currentCommand = new AddAnnouncement(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library, command.getName(), command.getDescription());
-                    addAnnouncement.startCommand(objectMapper, outputs);
                 }
                 case "removeAnnouncement" -> {
-                    RemoveAnnouncement removeAnnouncement = new RemoveAnnouncement(
+                    currentCommand = new RemoveAnnouncement(
                             command.getCommand(), command.getUsername(),
                             command.getTimestamp(), command.getName(), library);
-                    removeAnnouncement.startCommand(objectMapper, outputs);
                 }
                 case "showAlbums" -> {
-                    ShowAlbums showAlbums = new ShowAlbums(command.getCommand(),
+                    currentCommand = new ShowAlbums(command.getCommand(),
                             command.getUsername(), command.getTimestamp(), library);
-                    showAlbums.startCommand(objectMapper, outputs);
                 }
                 case "showPodcasts" -> {
-                    ShowPodcasts showPodcasts = new ShowPodcasts(command.getCommand(),
+                    currentCommand = new ShowPodcasts(command.getCommand(),
                             command.getUsername(), command.getTimestamp(), library);
-                    showPodcasts.startCommand(objectMapper, outputs);
                 }
                 case "printCurrentPage" -> {
-                    PrintCurrentPage printCurrentPage = new PrintCurrentPage(
+                    currentCommand = new PrintCurrentPage(
                             command.getCommand(), command.getUsername(),
                             command.getTimestamp(), library);
-                    printCurrentPage.startCommand(objectMapper, outputs);
                 }
                 case "changePage" -> {
-                    ChangePage changePage = new ChangePage(command.getCommand(),
+                    currentCommand = new ChangePage(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             command.getNextPage(), library, players);
-                    changePage.startCommand(objectMapper, outputs);
                 }
                 case "getAllUsers" -> {
-                    GetAllUsers getAllUsers = new GetAllUsers(command.getCommand(),
+                    currentCommand = new GetAllUsers(command.getCommand(),
                             command.getTimestamp(), library);
-                    getAllUsers.startCommand(objectMapper, outputs);
                 }
                 case "deleteUser" -> {
-                    DeleteUser deleteUser = new DeleteUser(command.getCommand(),
+                    currentCommand = new DeleteUser(command.getCommand(),
                             command.getUsername(), command.getTimestamp(), library,
                             players);
-                    deleteUser.startCommand(objectMapper, outputs);
                 }
                 case "removeAlbum" -> {
-                    RemoveAlbum removeAlbum = new RemoveAlbum(command.getCommand(),
+                    currentCommand = new RemoveAlbum(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             command.getName(), library, players);
-                    removeAlbum.startCommand(objectMapper, outputs);
                 }
                 case "getTop5Albums" -> {
-                    GetTop5Albums getTop5Albums = new GetTop5Albums(command.getCommand(),
+                    currentCommand = new GetTop5Albums(command.getCommand(),
                             command.getTimestamp(), library);
-                    getTop5Albums.startCommand(objectMapper, outputs);
                 }
                 case "getTop5Artists" -> {
-                    GetTop5Artists getTop5Artists = new GetTop5Artists(
+                    currentCommand = new GetTop5Artists(
                             command.getCommand(), command.getTimestamp(), library);
-                    getTop5Artists.startCommand(objectMapper, outputs);
                 }
                 case "removePodcast" -> {
-                    RemovePodcast removePodcast = new RemovePodcast(command.getCommand(),
+                    currentCommand = new RemovePodcast(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             command.getName(), library, players);
-                    removePodcast.startCommand(objectMapper, outputs);
                 }
                 case "wrapped" -> {
-                    Wrapped wrapped = new Wrapped(command.getCommand(), command.getUsername(),
+                    currentCommand = new Wrapped(command.getCommand(), command.getUsername(),
                             command.getTimestamp(), library, players);
-                    wrapped.startCommand(objectMapper, outputs);
                 }
                 case "buyPremium" -> {
-                    BuyPremium buyPremium = new BuyPremium(command.getCommand(),
+                    currentCommand = new BuyPremium(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library, players);
-                    buyPremium.startCommand(objectMapper, outputs);
                 }
                 case "cancelPremium" -> {
-                    CancelPremium cancelPremium = new CancelPremium(command.getCommand(),
+                    currentCommand = new CancelPremium(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library, players);
-                    cancelPremium.startCommand(objectMapper, outputs);
                 }
                 case "seeMerch" -> {
-                    SeeMerch seeMerch = new SeeMerch(command.getCommand(),
+                    currentCommand = new SeeMerch(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library);
-                    seeMerch.startCommand(objectMapper, outputs);
                 }
                 case "buyMerch" -> {
-                    BuyMerch buyMerch = new BuyMerch(command.getCommand(),
+                    currentCommand = new BuyMerch(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             command.getName(), library);
-                    buyMerch.startCommand(objectMapper, outputs);
                 }
                 case "subscribe" -> {
-                    Subscribe subscribe =  new Subscribe(command.getCommand(),
+                    currentCommand =  new Subscribe(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library);
-                    subscribe.startCommand(objectMapper, outputs);
                 }
                 case "getNotifications" -> {
-                    GetNotifications getNotifications = new GetNotifications(command.getCommand(),
+                    currentCommand = new GetNotifications(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library);
-                    getNotifications.startCommand(objectMapper, outputs);
                 }
                 case "previousPage" -> {
-                    PreviousPage previousPage = new PreviousPage(command.getCommand(),
+                    currentCommand = new PreviousPage(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library, players);
-                    previousPage.startCommand(objectMapper, outputs);
                 }
                 case "nextPage" -> {
-                    NextPage nextPage = new NextPage(command.getCommand(),
+                    currentCommand = new NextPage(command.getCommand(),
                             command.getUsername(), command.getTimestamp(),
                             library, players);
-                    nextPage.startCommand(objectMapper, outputs);
                 }
                 case "updateRecommendations" -> {
-                    UpdateRecommendations updateRecommendations =  new UpdateRecommendations(
+                    currentCommand =  new UpdateRecommendations(
                             command.getCommand(), command.getUsername(),
                             command.getTimestamp(), command.getRecommendationType(),
                             library, players);
-                    updateRecommendations.startCommand(objectMapper, outputs);
                 }
                 case "loadRecommendations" -> {
-                    LoadRecommendation loadRecommendation = new LoadRecommendation(
+                    currentCommand = new LoadRecommendation(
                             command.getCommand(), command.getUsername(),
                             command.getTimestamp(), library, players);
-                    loadRecommendation.startCommand(objectMapper, outputs);
                 }
                 default -> { }
             }
             // we get the last typestamp
             this.lastTimestamp = command.getTimestamp();
+            // now that we build the command we build the invoker
+            Invoker invoker = new Invoker(currentCommand, objectMapper, outputs);
+            // we start the action from the invoker
+            if (currentCommand != null) {
+                invoker.action();
+            }
+            // we make the adjustments for the needing commands
+            if (command.getCommand().equals("createPlaylist")) {
+                CreatePlaylist createPlaylistCommand = (CreatePlaylist) currentCommand;
+                if (library.typeOfUser(createPlaylistCommand.getUsername()) == 1
+                        && library.getUser(createPlaylistCommand.getUsername()).isStatus()) {
+                    globalPlaylistId = createPlaylistCommand.getGlobalPlaylistId();
+                }
+            }
         }
+        // we get the application ready to end and calculate statistics
         this.updateAllPlayers();
         this.endProgram();
     }

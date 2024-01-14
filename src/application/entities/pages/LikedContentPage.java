@@ -2,7 +2,8 @@ package application.entities.pages;
 
 import application.entities.library.Playlist;
 import application.entities.library.Song;
-import application.entities.pages.visitor.PageVisitor;
+import application.entities.pages.managervisitor.PageVisitor;
+import application.entities.pages.typevisitor.TypePageVisitor;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public final class LikedContentPage implements Page {
     }
 
     /**
-     * Method that accepts the visitor
+     * Method that accepts the visitor PageVisitor
      * @param visitor
      */
     @Override
@@ -33,12 +34,12 @@ public final class LikedContentPage implements Page {
     }
 
     /**
-     * Implementation of whichPage method
-     * @return - 1 for LikedContentPage
+     * Method that accepts the visitor TypePageVisitor
+     * @param visitor
      */
     @Override
-    public int whichPage() {
-        return 1;
+    public String accept(final TypePageVisitor visitor) {
+        return visitor.visit(this);
     }
 
     public void setLikedSongs(final ArrayList<Song> likedSongs) {

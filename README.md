@@ -97,11 +97,36 @@ Comparator<Integer> comparator = (index1, index2) -> {
 
 # Motivatie Design:
 * Factory: Am folosit factory design pattern la crearea userilor(mai multe detalii despre cum am facut asta se afla mai sus). Am folosit acest pattern pentru a nu ma ingrijora cu realizarea obiectelor de care am nevoie, factory-ul primeste tipul de obiect pe care il vreau si acesta imi returneaza obiectul dorit.
-* Visitor: Avand un obiect care poate fi de mai multe tipuri (implementari ale unei interfete), am ales visitor design pattern pentru a separa mai multe actiuni pe care vreau sa le realizez pe acest obiect, visitorii concreti fiind implementati astfel sa stie ce sa faca in cadrul fiecarui tip de obiect posibil. In acest mod am separat actiunile si m am asigurat ca acestea se intampla pentru orice tip de obiect.
+* Visitor: Avand un obiect care poate fi de mai multe tipuri (implementari ale unei interfete), am ales visitor design pattern pentru a separa mai multe actiuni pe care vreau sa le realizez pe acest obiect, visitorii concreti fiind implementati astfel sa stie ce sa faca in cadrul fiecarui tip de obiect posibil. In acest mod am separat actiunile si m-am asigurat ca acestea se intampla pentru orice tip de obiect. De asemenea am folosit un visitor pentru a determina tipul de pagina, pentru a evita folosirea lui instanceOf.
 * Singleton: (mai sus am spus ce tip si cum este exact implementat). Aici scopul este unul evident, in program trebuie sa fie o singura care ruleaza si pentru a ma asigura ca nu se incalca acest lucru am folosit singleton design pattern.
+* Command: Am folosit acest design pattern la crearea si pornirea comenzilor pentru a introduce un intermediar care sa se ocupe de actiunea efectiva atunci cand imi doresc sa se intample asta in program. Astfel, prima data creez comanda si ulterior invoker-ul o porneste.
 
 # Noutati Flow:
+* Wrapped:
+   * Pentru user am stocat separat entitatile frecventate si numarul de ascultari ale acestora. Acest wrapped se modifica de fiecare data cand player-ul user-ului isi schimba starea
+   * Avand in vedere prezenta unor oarecum perechi in wrapped (entitati->lista ascultari), pentru a le sorta am creat o clasa interna generica, privata, care sorteaza entitatile in functie de ascultari. Aceasta este folosita pentru fiecare tip de entitate
+   * Am folosit genericitatea pentru claritatea codului, performanta si evitarea constructiei unor metode asemanatoare
+* Statistici monetizare:
+    * Aici am ales sa folosesc un fel de cont pentru fiecare artist/host, unde sa adaug treptat toate revenue-urile
+    * Pentru usurinta am adaugat si un revenue fiecare melodii, asta pentru a sustrage mai usor cea mai profitabila melodie
+* Premium:
+    * Din acest punct de vedere nu apar mari diferente, doar in metoda care actualizeaza instantele ce acumuleaza informatii in legatura cu statusul player-ului (ex: wrapped), se asigura ca in cazul in care utilizatorul este premium, sa se realizeze si monetizarea. (addSongForUser este metoda)
+* Notifications:
+    * Pentru notificari am realizat o lista pentru fiecare utilizator unde se stocheaza notificarile pe masura ce se realizeaza anumite comenzi
+    * In momentul unei afisari ale notificarilor se reseteaza lista
+* Recomandari si pagini:
+    * Am facut schimbarile necesare la change Page pentru a putea sa acceseze si pagina unui artist/host cu ajutorul acestei comenzi
+    * Pentru a putea merge forward/backwards prin istoricul de pagini am folosit o lista de pagini, cu referinte la interfata Page, si un index care retine pozitia la care ne aflam in acest istoric
+    * Lista (istoricul paginilor) va contine mereu de la prima pagina accesata pana la cea la care ne aflam acum.
+    * In cazul in care se da un changePage drept comanda, toate paginile de dupa pagina curenta (la care s-ar putea da forward) vor fi sterse.
+    * Avand aceasta implementare se poate da si forward/backwards, daca este posibil si comanda cere acest lucru
+    * Pentru a actualiza recomandarile am creat metode care in momentul in care se cere update creeaza aceste recomandari (daca este posibil) si le pune in Listele de recomandari a user-ului.
+    * Aceste liste sunt stocate in cadrul user-ului deoarece in cadrul implementarii mele homePage-ul nu este constant, el este creat doar in momentul in care este nevoie si cu ce status exista in momentul respectiv.
 
 # ++ Resurse:
 * Am folosit inteligenta artificiala pentru a genera diferite comparatoare si functii de verificare, precum:
+   * Construirea comparatoarelor:
+     Collections.sort(elPairs, Comparator.<ELPair<T>, Integer>comparing(ELPair::getListeners)
+     .reversed()
+     .thenComparing(ELPair::getEntity, customComp)); // customComp este o atributa din entitate dupa care se realizeaza sortarea
 

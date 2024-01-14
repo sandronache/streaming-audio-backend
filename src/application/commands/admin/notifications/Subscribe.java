@@ -5,12 +5,11 @@ import application.entities.library.Library;
 import application.entities.library.users.artist.Artist;
 import application.entities.library.users.host.Host;
 import application.entities.library.users.normal.User;
+import application.entities.pages.typevisitor.TypeVisitor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
-
-import static application.constants.Constants.THREE;
 
 /**
  * Class for subscribe command
@@ -57,14 +56,16 @@ public final class Subscribe implements Commands {
         // we get the user
         User user =  library.getUser(username);
         // we check if we are on the page of an artist or host
-        if (user.getPage().whichPage() != 2 && user.getPage().whichPage() != THREE) {
+        TypeVisitor visitor = new TypeVisitor();
+        if (!user.accept(visitor).equals("host")
+                && !user.accept(visitor).equals("artist")) {
             node.put("message",
                     "To subscribe you need to be on the page of an artist or host.");
             outputs.add(node);
             return;
         }
         // if we are on the page of an artist
-        if (user.getPage().whichPage() == 2) {
+        if (user.accept(visitor).equals("artist")) {
             Artist tempArtist = (Artist) user.getPage();
             if (!tempArtist.unsubscribeOrSubscribeUser(user)) {
                 node.put("message", username +  " unsubscribed from "

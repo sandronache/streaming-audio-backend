@@ -1,4 +1,4 @@
-package application.entities.pages.visitor;
+package application.entities.pages.managervisitor;
 
 import application.entities.library.Episode;
 import application.entities.library.Library;

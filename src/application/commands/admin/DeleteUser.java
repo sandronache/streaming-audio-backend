@@ -5,10 +5,11 @@ import application.entities.library.Library;
 import application.entities.library.Playlist;
 import application.entities.library.Podcast;
 import application.entities.library.Song;
-import application.entities.library.users.normal.User;
 import application.entities.library.users.artist.Album;
 import application.entities.library.users.artist.Artist;
 import application.entities.library.users.host.Host;
+import application.entities.library.users.normal.User;
+import application.entities.pages.typevisitor.TypeVisitor;
 import application.entities.player.Player;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -74,8 +75,9 @@ public final class DeleteUser extends PlayerRelatedCommands {
         }
         // if the user is on the page of a host or an artist
         // we cant delete it
-        if (user.getPage().whichPage() == 2
-        || user.getPage().whichPage() == THREE) {
+        TypeVisitor visitor = new TypeVisitor();
+        if (user.accept(visitor).equals("host")
+        || user.accept(visitor).equals("artist")) {
             return false;
         }
         // if we got here we can delete the user
@@ -134,7 +136,8 @@ public final class DeleteUser extends PlayerRelatedCommands {
         // now we check if any of the normal users are on the page
         // of this artist
         for (User user: library.getUsers()) {
-            if (user.getPage().whichPage() == 2) {
+            TypeVisitor visitor = new TypeVisitor();
+            if (user.accept(visitor).equals("artist")) {
                 Artist castedArtist = (Artist) user.getPage();
                 if (castedArtist.equals(artist)) {
                     return false;
@@ -188,7 +191,8 @@ public final class DeleteUser extends PlayerRelatedCommands {
         // now we check if any normal user is on the page
         // of this host
         for (User user: library.getUsers()) {
-            if (user.getPage() != null && user.getPage().whichPage() == THREE) {
+            TypeVisitor visitor = new TypeVisitor();
+            if (user.getPage() != null && user.accept(visitor).equals("host")) {
                 Host castedHost = (Host) user.getPage();
                 if (castedHost.equals(host)) {
                     return false;

@@ -5,7 +5,8 @@ import application.entities.library.Song;
 import application.entities.library.users.UserDatabase;
 import application.entities.library.users.normal.User;
 import application.entities.pages.Page;
-import application.entities.pages.visitor.PageVisitor;
+import application.entities.pages.managervisitor.PageVisitor;
+import application.entities.pages.typevisitor.TypePageVisitor;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public final class Artist implements UserDatabase, Page {
     }
 
     /**
-     * Method that accepts the visitor
+     * Method that accepts the visitor PageVisitor
      * @param visitor
      */
     @Override
@@ -53,12 +54,12 @@ public final class Artist implements UserDatabase, Page {
     }
 
     /**
-     * Implementation of whichPage method
-     * @return - 2 for Artist
+     * Method that accepts the visitor TypePageVisitor
+     * @param visitor
      */
     @Override
-    public int whichPage() {
-        return 2;
+    public String accept(final TypePageVisitor visitor) {
+        return visitor.visit(this);
     }
 
     /**

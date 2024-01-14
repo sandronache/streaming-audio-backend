@@ -9,7 +9,9 @@ import application.entities.library.users.normal.premium.PremiumStatus;
 import application.entities.pages.HomePage;
 import application.entities.pages.LikedContentPage;
 import application.entities.pages.Page;
-import application.entities.pages.visitor.PageVisitor;
+import application.entities.pages.managervisitor.PageVisitor;
+import application.entities.pages.typevisitor.TypePageVisitor;
+import application.entities.pages.typevisitor.TypeVisitor;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -90,11 +92,19 @@ public final class User implements UserDatabase {
     }
 
     /**
-     * Method that puts page in acceptance for a visitor
+     * Method that puts page in acceptance for PageVisitor visitor
      * @param visitor
      */
     public void accept(final PageVisitor visitor) {
         page.accept(visitor);
+    }
+
+    /**
+     * Method that puts page in acceptance for TypePageVisitor
+     * @param visitor
+     */
+    public String accept(final TypePageVisitor visitor) {
+        return page.accept(visitor);
     }
 
     /**
@@ -160,12 +170,11 @@ public final class User implements UserDatabase {
         // we get the page
         Page newPage = pageHistory.get(currentPositionPH);
         // we verify the type and put the page accordingly
-        if (newPage.whichPage() == 0) {
+        TypeVisitor visitor = new TypeVisitor();
+        if (newPage.accept(visitor).equals("homePage")) {
             page = new HomePage();
-        } else if (newPage.whichPage() == 1) {
+        } else if (newPage.accept(visitor).equals("likedContentPage")) {
             page = new LikedContentPage();
-        } else if (newPage.whichPage() == 2) {
-            page = newPage;
         } else {
             page = newPage;
         }

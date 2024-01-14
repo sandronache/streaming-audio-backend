@@ -4,6 +4,7 @@ import application.commands.root.Commands;
 import application.entities.library.Library;
 import application.entities.library.users.artist.Artist;
 import application.entities.library.users.normal.User;
+import application.entities.pages.typevisitor.TypeVisitor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -58,7 +59,8 @@ public final class BuyMerch implements Commands {
         // we get the user
         User user =  library.getUser(username);
         // we check if we are on the page of an artist
-        if (user.getPage().whichPage() != 2) {
+        TypeVisitor visitor = new TypeVisitor();
+        if (!user.accept(visitor).equals("artist")) {
             node.put("message", "Cannot buy merch from this page.");
             outputs.add(node);
             return;

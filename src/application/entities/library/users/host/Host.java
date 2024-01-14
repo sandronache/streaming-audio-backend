@@ -2,16 +2,15 @@ package application.entities.library.users.host;
 
 import application.entities.library.Library;
 import application.entities.library.Podcast;
-import application.entities.library.users.normal.User;
 import application.entities.library.users.UserDatabase;
+import application.entities.library.users.normal.User;
 import application.entities.pages.Page;
-import application.entities.pages.visitor.PageVisitor;
+import application.entities.pages.managervisitor.PageVisitor;
+import application.entities.pages.typevisitor.TypePageVisitor;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Objects;
-
-import static application.constants.Constants.THREE;
 
 /**
  * Class that represents a Host
@@ -46,7 +45,7 @@ public final class Host implements UserDatabase, Page {
     }
 
     /**
-     * Method that accepts the visitor
+     * Method that accepts the visitor PageVisitor
      * @param visitor
      */
     @Override
@@ -55,12 +54,12 @@ public final class Host implements UserDatabase, Page {
     }
 
     /**
-     * Implementation of whichPage method
-     * @return - 3 for Host
+     * Method that accepts the visitor TypePageVisitor
+     * @param visitor
      */
     @Override
-    public int whichPage() {
-        return THREE;
+    public String accept(final TypePageVisitor visitor) {
+        return visitor.visit(this);
     }
 
     /**

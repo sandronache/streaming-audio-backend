@@ -1,6 +1,6 @@
 package main;
 
-import application.Run;
+import application.commands.root.Run;
 import application.entities.input.Command;
 import checker.Checker;
 import checker.CheckerConstants;
